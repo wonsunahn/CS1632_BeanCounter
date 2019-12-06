@@ -24,6 +24,7 @@ public class Bean {
 	private static final double SKILL_AVERAGE = 4.5;	// MainPanel.SLOT_COUNT * 0.5;
 	private static final double SKILL_STDEV = 1.5;		// Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5));
 	
+	int redundant;
 	/**
 	 * Constructor - creates a bean in either luck mode or skill mode.
 	 * 
@@ -32,5 +33,10 @@ public class Bean {
 	 */
 	Bean(boolean isLuck, Random rand) {
 		// TODO: Implement
+		int redundant = 0;
+		String temp = "";
+		for(int i=0; i < 100; i++) {
+			temp += "a";
+		}
 	}
 }
