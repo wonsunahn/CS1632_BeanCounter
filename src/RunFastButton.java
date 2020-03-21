@@ -5,7 +5,7 @@ import javax.swing.JButton;
 
 public class RunFastButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +14,14 @@ public class RunFastButton extends JButton {
 	 */
 	public RunFastButton(MainPanel m) {
 		super("Fast");
-		_m = m;
+		mainPanel = m;
 		addActionListener(new RunFastButtonListener());
 	}
 
 	class RunFastButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.runFast();
+			mainPanel.runFast();
 		}
 	}
 

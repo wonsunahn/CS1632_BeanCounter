@@ -5,7 +5,7 @@ import javax.swing.JButton;
 
 public class ResetButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +14,14 @@ public class ResetButton extends JButton {
 	 */
 	public ResetButton(MainPanel m) {
 		super("Reset");
-		_m = m;
+		mainPanel = m;
 		addActionListener(new ResetButtonListener());
 	}
 
 	class ResetButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.reset();
+			mainPanel.reset();
 		}
 	}
 

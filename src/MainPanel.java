@@ -19,18 +19,18 @@ import javax.swing.JPanel;
 
 public class MainPanel extends JPanel {
 
-	private BeanCounterLogic _logic;	// The core logic of the program
-	private Bean[] _beans;				// The beans in the machine
+	private BeanCounterLogic logic;	// The core logic of the program
+	private Bean[] beans;				// The beans in the machine
 
-	private Point[] _beanPositions;		// Current bean positions in physical coordinates
-	private Point[] _targetPositions;	// Target positions that the beans need to move to
+	private Point[] beanPositions;		// Current bean positions in physical coordinates
+	private Point[] targetPositions;	// Target positions that the beans need to move to
 
-	private int _timeBetweenFrames;		// Time (ms) between bean movement animation frames
-	private int _timeBetweenSteps;		// Time (ms) that is paused before executing the next step
+	private int timeBetweenFrames;		// Time (ms) between bean movement animation frames
+	private int timeBetweenSteps;		// Time (ms) that is paused before executing the next step
 
-	private boolean _isRunning;			// Is the bean counter running now?
+	private boolean isRunning;			// Is the bean counter running now?
 
-	private int _barHeight;				// The height reserved for bar graphs in the panel
+	private int barHeight;				// The height reserved for bar graphs in the panel
 
 	public static final int SLOT_COUNT = 10;
 	public static final int PEG_SIZE = 10;
@@ -49,19 +49,19 @@ public class MainPanel extends JPanel {
 		super();
 		
 		// Create the internal logic
-		_logic = new BeanCounterLogic(SLOT_COUNT);
+		logic = BeanCounterLogic.createInstance(SLOT_COUNT);
 		// Create the beans
-		_beans = new Bean[beanCount];
+		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			_beans[i] = new Bean(isLuck, new Random());
+			beans[i] = Bean.createInstance(isLuck, new Random());
 		}
 		// Initialize the logic with the beans
-		_logic.reset(_beans);
+		logic.reset(beans);
 		// Set some display related parameters
-		_timeBetweenFrames = 10;
-		_timeBetweenSteps = 100;
+		timeBetweenFrames = 10;
+		timeBetweenSteps = 100;
 		// Heuristically maximum height of a bell curve with some headroom
-		_barHeight = (int) Math.round(beanCount * 0.27) + 10; 
+		barHeight = (int) Math.round(beanCount * 0.27) + 10; 
 		setBackground(Color.WHITE);
 	}
 
@@ -106,7 +106,7 @@ public class MainPanel extends JPanel {
 		int initialX = d.width / 2;
 		int initialY = TOP_MARGIN;
 		int pegXSpacing = d.width / (SLOT_COUNT);
-		int pegYSpacing = (d.height - TOP_MARGIN - BOTTOM_MARGIN - _barHeight - BAR_TEXT_HEIGHT)
+		int pegYSpacing = (d.height - TOP_MARGIN - BOTTOM_MARGIN - barHeight - BAR_TEXT_HEIGHT)
 				/ (SLOT_COUNT - 1);
 		int physicalX = initialX - pegXSpacing / 2 * p.y + p.x * pegXSpacing;
 		int physicalY = initialY + p.y * pegYSpacing;
@@ -122,7 +122,7 @@ public class MainPanel extends JPanel {
 	private Point[] getBeanPositions() {
 		Point[] positions = new Point[SLOT_COUNT];
 		for (int yPos = 0; yPos < SLOT_COUNT; yPos++) {
-			int xPos = _logic.getInFlightBeanXPos(yPos);
+			int xPos = logic.getInFlightBeanXPos(yPos);
 			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) {
 				positions[yPos] = logicalToPhysical(new Point(xPos, yPos));
 				positions[yPos].y -= PEG_SIZE + 5;
@@ -138,13 +138,13 @@ public class MainPanel extends JPanel {
 	 */
 	private void runOneStep() {
 		// Get current positions
-		_beanPositions = getBeanPositions();
+		beanPositions = getBeanPositions();
 		// Drop the last bean into the slot
-		_beanPositions[SLOT_COUNT - 1] = null;
+		beanPositions[SLOT_COUNT - 1] = null;
 		// Advance one step
-		_logic.advanceStep();
+		logic.advanceStep();
 		// Get new positions
-		_targetPositions = getBeanPositions();
+		targetPositions = getBeanPositions();
 		// Repaint
 		repaint();
 	}
@@ -153,8 +153,8 @@ public class MainPanel extends JPanel {
 	 * Advance the machine one step. Stop the machine if running continuously.
 	 */
 	public void step() {
-		_isRunning = false;
-		_timeBetweenFrames = 10;
+		isRunning = false;
+		timeBetweenFrames = 10;
 		runOneStep();
 	}
 
@@ -162,9 +162,9 @@ public class MainPanel extends JPanel {
 	 * Run the machine continuously in slow mode.
 	 */
 	public void runSlow() {
-		_isRunning = true;
-		_timeBetweenFrames = 10;
-		_timeBetweenSteps = 100;
+		isRunning = true;
+		timeBetweenFrames = 10;
+		timeBetweenSteps = 100;
 		runOneStep();
 	}
 
@@ -172,23 +172,23 @@ public class MainPanel extends JPanel {
 	 * Run the machine continuously in fast mode.
 	 */
 	public void runFast() {
-		_isRunning = true;
-		_timeBetweenFrames = 1;
-		_timeBetweenSteps = 1;
+		isRunning = true;
+		timeBetweenFrames = 1;
+		timeBetweenSteps = 1;
 		runOneStep();
 	}
 
 	public void stop() {
-		_isRunning = false;
+		isRunning = false;
 	}
 
 	public void lowerHalf() {
-		_logic.lowerHalf();
+		logic.lowerHalf();
 		repaint();
 	}
 
 	public void upperHalf() {
-		_logic.upperHalf();
+		logic.upperHalf();
 		repaint();
 	}
 
@@ -198,10 +198,10 @@ public class MainPanel extends JPanel {
 	 * with that half of your beans only.
 	 */
 	public void repeat() {
-		_isRunning = false;
-		_logic.repeat();
+		isRunning = false;
+		logic.repeat();
 		// repeat() clears machine of in-flight beans, so need to refresh positions
-		_beanPositions = getBeanPositions();
+		beanPositions = getBeanPositions();
 		repaint();
 	}
 
@@ -209,15 +209,17 @@ public class MainPanel extends JPanel {
 	 * Stop the machine reset with the original beans.
 	 */
 	public void reset() {
-		_isRunning = false;
-		_logic.reset(_beans);
+		isRunning = false;
+		logic.reset(beans);
 		// repeat() clears machine of in-flight beans, so need to refresh positions
-		_beanPositions = getBeanPositions();
+		beanPositions = getBeanPositions();
 		repaint();
 	}
 
 	/**
 	 * Draw the pegs in the machine.
+	 * 
+	 * @param g the graphics object
 	 */
 	public void drawPegs(Graphics g) {
 		g.setColor(Color.BLACK);
@@ -237,8 +239,8 @@ public class MainPanel extends JPanel {
 	public void drawBeans(Graphics g) {
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < SLOT_COUNT; i++) {
-			if (_beanPositions[i] != null) {
-				g.fillOval(_beanPositions[i].x, _beanPositions[i].y, BEAN_SIZE, BEAN_SIZE);
+			if (beanPositions[i] != null) {
+				g.fillOval(beanPositions[i].x, beanPositions[i].y, BEAN_SIZE, BEAN_SIZE);
 			}
 		}
 	}
@@ -253,8 +255,8 @@ public class MainPanel extends JPanel {
 		for (int i = 0; i < SLOT_COUNT; i++) {
 			Dimension d = getSize();
 			Point p = logicalToPhysical(new Point(i, SLOT_COUNT));
-			g.fillRect(p.x, d.height - BOTTOM_MARGIN - BAR_TEXT_HEIGHT - _logic.getSlotBeanCount(i),
-					d.width / (SLOT_COUNT + 1), _logic.getSlotBeanCount(i));
+			g.fillRect(p.x, d.height - BOTTOM_MARGIN - BAR_TEXT_HEIGHT - logic.getSlotBeanCount(i),
+					d.width / (SLOT_COUNT + 1), logic.getSlotBeanCount(i));
 			g.drawString(String.valueOf(i), p.x + d.width / (SLOT_COUNT + 1) / 2, d.height - BOTTOM_MARGIN);
 		}
 	}
@@ -268,17 +270,17 @@ public class MainPanel extends JPanel {
 	public void drawStats(Graphics g) {
 		Dimension d = getSize();
 		g.setFont(new Font("Courier", Font.PLAIN, 20));
-		String average = "Average = " + new DecimalFormat("#.##").format(_logic.getAverageSlotBeanCount());
+		String average = "Average = " + new DecimalFormat("#.##").format(logic.getAverageSlotBeanCount());
 		g.drawString(average, d.width - 200, TOP_MARGIN);
-		String remaining = "Remaining = " + _logic.getRemainingBeanCount();
+		String remaining = "Remaining = " + logic.getRemainingBeanCount();
 		g.drawString(remaining, d.width - 200, TOP_MARGIN + 30);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (_beanPositions == null) {
-			_beanPositions = getBeanPositions();
+		if (beanPositions == null) {
+			beanPositions = getBeanPositions();
 		}
 		drawPegs(g);
 		drawBeans(g);
@@ -286,30 +288,30 @@ public class MainPanel extends JPanel {
 		drawStats(g);
 
 		// If we have target positions, we are still moving
-		if (_targetPositions != null) {
+		if (targetPositions != null) {
 			boolean allArrived = true;
 			for (int i = 0; i < SLOT_COUNT - 1; i++) {
-				if (_beanPositions[i] != null && _targetPositions[i + 1] != null) {
-					allArrived &= moveOnePixel(_beanPositions[i], _targetPositions[i + 1]);
+				if (beanPositions[i] != null && targetPositions[i + 1] != null) {
+					allArrived &= moveOnePixel(beanPositions[i], targetPositions[i + 1]);
 				}
 			}
 			try {
-				Thread.sleep(_timeBetweenFrames);
+				Thread.sleep(timeBetweenFrames);
 			} catch (InterruptedException ie) {
 				// Nothing to do here
 			}
 			if (allArrived) {
 				// Now that beans have arrived, reset bean positions for the next frame
-				_beanPositions = getBeanPositions();
+				beanPositions = getBeanPositions();
 				// Remove target positions such that animations stop for this step
-				_targetPositions = null;
+				targetPositions = null;
 				// If running, take the next step
-				if (_isRunning) {
-					if (Arrays.stream(_beanPositions).filter(p -> p != null).count() == 0) {
-						_isRunning = false;
+				if (isRunning) {
+					if (Arrays.stream(beanPositions).filter(p -> p != null).count() == 0) {
+						isRunning = false;
 					} else {
 						try {
-							Thread.sleep(_timeBetweenSteps);
+							Thread.sleep(timeBetweenSteps);
 						} catch (InterruptedException ie) {
 							// Nothing to do here
 						}

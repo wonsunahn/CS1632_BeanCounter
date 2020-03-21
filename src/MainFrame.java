@@ -6,11 +6,11 @@ public class MainFrame {
 	private static final int HEIGHT = 600;
 	private static final int WIDTH = 800;
 
-	private JFrame _frame = new JFrame("Bean Counter");
+	private JFrame frame = new JFrame("Bean Counter");
 
-	private MainPanel _mainPanel;
+	private MainPanel mainPanel;
 
-	private ButtonPanel _buttonPanel;
+	private ButtonPanel buttonPanel;
 
 	/**
 	 * Constructor - creates the main panel. Inside it is the main panel and the
@@ -21,20 +21,20 @@ public class MainFrame {
 	 */
 	public MainFrame(int beanCount, boolean luck) {
 
-		_frame.setSize(MainFrame.WIDTH, MainFrame.HEIGHT);
+		frame.setSize(MainFrame.WIDTH, MainFrame.HEIGHT);
 		// Close program when window is closed
-		_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Add Main Panel and Button Panel
 
-		_mainPanel = new MainPanel(beanCount, luck);
+		mainPanel = new MainPanel(beanCount, luck);
 
-		_buttonPanel = new ButtonPanel(_mainPanel);
+		buttonPanel = new ButtonPanel(mainPanel);
 
-		_frame.add(_mainPanel, BorderLayout.CENTER);
-		_frame.add(_buttonPanel, BorderLayout.SOUTH);
+		frame.add(mainPanel, BorderLayout.CENTER);
+		frame.add(buttonPanel, BorderLayout.SOUTH);
 
-		_frame.setVisible(true);
+		frame.setVisible(true);
 	}
 
 }

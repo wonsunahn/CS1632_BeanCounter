@@ -5,7 +5,7 @@ import javax.swing.JButton;
 
 public class StopButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +14,14 @@ public class StopButton extends JButton {
 	 */
 	public StopButton(MainPanel m) {
 		super("Stop");
-		_m = m;
+		mainPanel = m;
 		addActionListener(new StopButtonListener());
 	}
 
 	class StopButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.stop();
+			mainPanel.stop();
 		}
 	}
 

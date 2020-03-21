@@ -5,7 +5,7 @@ import javax.swing.JButton;
 
 public class UpperHalfButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +14,14 @@ public class UpperHalfButton extends JButton {
 	 */
 	public UpperHalfButton(MainPanel m) {
 		super("Upper Half");
-		_m = m;
+		mainPanel = m;
 		addActionListener(new UpperHalfButtonListener());
 	}
 
 	class UpperHalfButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.upperHalf();
+			mainPanel.upperHalf();
 		}
 	}
 

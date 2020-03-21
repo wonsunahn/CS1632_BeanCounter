@@ -7,17 +7,21 @@ import java.util.ArrayList;
 public class TestRunner {
 	/**
 	 * Main method
-	 * 
+	 *
 	 * @param args IGNORED, kept for compatibility
 	 */
 	public static void main(String[] args) {
+
+		if (args.length > 0 && args[0].equals("buggy")) {
+			Config.setBuggyBeanCounterLogic(true);
+			System.out.println("TESTING BUGGY IMPLEMENTATION\n");
+		}
 
 		ArrayList<Class> classesToTest = new ArrayList<Class>();
 		boolean anyFailures = false;
 
 		// ADD ANY CLASSES YOU WISH TO TEST HERE
 		classesToTest.add(BeanCounterLogicTest.class);
-		classesToTest.add(BeanTest.class);
 
 		// For all test classes added, loop through and use JUnit
 		// to run them.
@@ -29,6 +33,7 @@ public class TestRunner {
 
 			for (Failure f : r.getFailures()) {
 				System.out.println(f.toString());
+				//System.out.println(f.getTrace());
 			}
 
 			// If r is not successful, there was at least one
@@ -41,14 +46,6 @@ public class TestRunner {
 				anyFailures = true;
 			}
 
-		}
-
-		// After completion, notify user if all tests passed or any failed.
-
-		if (anyFailures) {
-			System.out.println("\n!!! - At least one failure, see above.");
-		} else {
-			System.out.println("\nALL TESTS PASSED");
 		}
 	}
 }
