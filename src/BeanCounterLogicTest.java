@@ -32,7 +32,7 @@ public class BeanCounterLogicTest {
 	public static void setUp() {
 		/*
 		 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
-		 * beanCount, and isLucky: slotCount should take values 1-5, beanCount should
+		 * beanCount, and isLuck: slotCount should take values 1-5, beanCount should
 		 * take values 0-3, and isLucky should be either true or false. For reference on
 		 * how to use the Verify API, look at:
 		 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
