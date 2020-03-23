@@ -219,7 +219,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	public static void showUsage() {
 		System.out.println("Usage: java BeanCounterLogic slot_count bean_count <luck | skill> [debug]");
 		System.out.println("Example: java BeanCounterLogic 10 400 luck");
-		System.out.println("Example: java BeanCounterLogic 20 1000 skill verbose");
+		System.out.println("Example: java BeanCounterLogic 20 1000 skill debug");
 	}
 	
 	/**
