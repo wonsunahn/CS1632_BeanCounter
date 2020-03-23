@@ -53,7 +53,7 @@ public class MainPanel extends JPanel {
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(isLuck, new Random());
+			beans[i] = Bean.createInstance(SLOT_COUNT, isLuck, new Random());
 		}
 		// Initialize the logic with the beans
 		logic.reset(beans);

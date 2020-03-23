@@ -1,6 +1,7 @@
 import gov.nasa.jpf.vm.Verify;
 
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -43,6 +44,16 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 		// TODO: Implement
 	}
 
+	/**
+	 * Returns the number of slots the machine was initialized with.
+	 * 
+	 * @return number of slots
+	 */
+	public int getSlotCount() {
+		// TODO: Implement
+		return 1;
+	}
+	
 	/**
 	 * Returns the number of beans remaining that are waiting to get inserted.
 	 * 
@@ -141,30 +152,96 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 		// TODO: Implement
 		return false;
 	}
+	
+	/**
+	 * Number of spaces in between numbers when printing out the state of the machine.
+	 * Make sure the number is odd (even numbers don't work as well).
+	 */
+	private int xspacing = 3;
 
-	public static void showUsage() {
-		System.out.println("Usage: java BeanCounterLogic <number of beans> <luck | skill>");
-		System.out.println("Example: java BeanCounterLogic 400 luck");
+	/**
+	 * Calculates the number of spaces to indent for the given row of pegs.
+	 * 
+	 * @param yPos the y-position (or row number) of the pegs
+	 * @return the number of spaces to indent
+	 */
+	private int getIndent(int yPos) {
+		int rootIndent = (getSlotCount() - 1) * (xspacing + 1) / 2 + (xspacing + 1);
+		return rootIndent - (xspacing + 1) / 2 * yPos;
 	}
 
+	/**
+	 * Constructs a string representation of the bean count of all the slots.
+	 * 
+	 * @return a string with bean counts for each slot
+	 */
+	public String getSlotString() {
+		StringBuilder bld = new StringBuilder();
+		Formatter fmt = new Formatter(bld);
+		String format = "%" + (xspacing + 1) + "d";
+		for (int i = 0; i < getSlotCount(); i++) {
+			fmt.format(format, getSlotBeanCount(i));
+		}
+		fmt.close();
+		return bld.toString();
+	}
+
+	/**
+	 * Constructs a string representation of the entire machine. If a peg has a bean
+	 * above it, it is represented as a "1", otherwise it is represented as a "0".
+	 * At the very bottom is attached the slots with the bean counts.
+	 * 
+	 * @return the string representation of the machine
+	 */
+	public String toString() {
+		StringBuilder bld = new StringBuilder();
+		Formatter fmt = new Formatter(bld);
+		for (int yPos = 0; yPos < getSlotCount(); yPos++) {
+			int xBeanPos = getInFlightBeanXPos(yPos);
+			for (int xPos = 0; xPos <= yPos; xPos++) {
+				int spacing = (xPos == 0) ? getIndent(yPos) : (xspacing + 1);
+				String format = "%" + spacing + "d";
+				if (xPos == xBeanPos) {
+					fmt.format(format, 1);
+				} else {
+					fmt.format(format, 0);
+				}
+			}
+			fmt.format("%n");
+		}
+		fmt.close();
+		return bld.toString() + getSlotString();
+	}
+
+	/**
+	 * Prints usage information.
+	 */
+	public static void showUsage() {
+		System.out.println("Usage: java BeanCounterLogic slot_count bean_count <luck | skill> [debug]");
+		System.out.println("Example: java BeanCounterLogic 10 400 luck");
+		System.out.println("Example: java BeanCounterLogic 20 1000 skill verbose");
+	}
+	
 	/**
 	 * Auxiliary main method. Runs the machine in text mode with no bells and
 	 * whistles. It simply shows the slot bean count at the end.
 	 * 
-	 * @param args args[0] is an integer bean count, args[1] is a string which is
-	 *             either luck or skill.
+	 * @param args commandline arguments; see showUsage() for detailed information
 	 */
 	public static void main(String[] args) {
+		boolean debug;
 		boolean luck;
+		int slotCount = 0;
 		int beanCount = 0;
 
-		if (args.length != 2) {
+		if (args.length != 3 && args.length != 4) {
 			showUsage();
 			return;
 		}
 
 		try {
-			beanCount = Integer.parseInt(args[0]);
+			slotCount = Integer.parseInt(args[0]);
+			beanCount = Integer.parseInt(args[1]);
 		} catch (NumberFormatException ne) {
 			showUsage();
 			return;
@@ -174,37 +251,46 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 			return;
 		}
 
-		if (args[1].equals("luck")) {
+		if (args[2].equals("luck")) {
 			luck = true;
-		} else if (args[1].equals("skill")) {
+		} else if (args[2].equals("skill")) {
 			luck = false;
 		} else {
 			showUsage();
 			return;
 		}
 		
+		if (args.length == 4 && args[3].equals("debug")) {
+			debug = true;
+		} else {
+			debug = false;
+		}
+
 		// Create the internal logic
-		int slotCount = 10;
 		BeanCounterLogicImpl logic = new BeanCounterLogicImpl(slotCount);
 		// Create the beans (in luck mode)
 		BeanImpl[] beans = new BeanImpl[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = new BeanImpl(luck, new Random());
+			beans[i] = new BeanImpl(slotCount, luck, new Random());
 		}
 		// Initialize the logic with the beans
 		logic.reset(beans);
-					
+
+		if (debug) {
+			System.out.println(logic.toString());
+		}
+
 		// Perform the experiment
 		while (true) {
 			if (!logic.advanceStep()) {
 				break;
 			}
+			if (debug) {
+				System.out.println(logic.toString());
+			}
 		}
 		// display experimental results
 		System.out.println("Slot bean counts:");
-		for (int i = 0; i < slotCount; i++) {
-			System.out.print(logic.getSlotBeanCount(i) + " ");
-		}
-		System.out.println("");
+		System.out.println(logic.getSlotString());
 	}
 }

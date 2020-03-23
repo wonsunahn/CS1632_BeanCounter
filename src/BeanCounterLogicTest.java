@@ -44,7 +44,7 @@ public class BeanCounterLogicTest {
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(isLuck, new Random());
+			beans[i] = Bean.createInstance(slotCount, isLuck, new Random());
 		}
 		
 		// A failstring useful to pass to assertions to get a more descriptive error.
