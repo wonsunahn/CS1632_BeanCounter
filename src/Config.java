@@ -1,12 +1,33 @@
+enum LogicType {
+	IMPL,
+	BUGGY,
+	SOLUTION
+}
+
+enum TestType {
+	JUNIT,
+	JPF_ON_JUNIT
+}
+
 public class Config {
-	// Whether to intentionally inject bugs into BeanCounterLogic.
-	private static boolean buggyBeanCounterLogic = false;
+	// Type of logic to use for BeanCounterLogic
+	private static LogicType logicType = LogicType.IMPL;
+	// Type of testing to do on BeanCounterLogic
+	private static TestType testType = TestType.JUNIT;
 	
-	public static void setBuggyBeanCounterLogic(boolean val) {
-		buggyBeanCounterLogic = val;
+	public static void setLogicType(LogicType type) {
+		logicType = type;
 	}
 
-	public static boolean getBuggyBeanCounterLogic() {
-		return buggyBeanCounterLogic;
+	public static LogicType getLogicType() {
+		return logicType;
+	}
+	
+	public static void setTestType(TestType type) {
+		testType = type;
+	}
+
+	public static TestType getTestType() {
+		return testType;
 	}
 }

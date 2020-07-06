@@ -10,10 +10,16 @@ public interface Bean {
 	 * @return Bean object
 	 */
 	public static Bean createInstance(int slotCount, boolean isLuck, Random rand) {
-		if (Config.getBuggyBeanCounterLogic()) {
-			return new BeanBuggy(slotCount, isLuck, rand);
-		} else {
+		switch (Config.getLogicType()) {
+		case IMPL:
 			return new BeanImpl(slotCount, isLuck, rand);
+		case BUGGY:
+			return new BeanBuggy(slotCount, isLuck, rand);
+		case SOLUTION:
+			return new BeanSolution(slotCount, isLuck, rand);
+		default:
+			assert(false);
+			return null;
 		}
 	}
 }

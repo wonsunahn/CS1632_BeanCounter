@@ -12,9 +12,39 @@ public class TestRunner {
 	 */
 	public static void main(String[] args) {
 
-		if (args.length > 0 && args[0].equals("buggy")) {
-			Config.setBuggyBeanCounterLogic(true);
-			System.out.println("TESTING BUGGY IMPLEMENTATION\n");
+		if (args.length != 2) {
+			System.out.println("Usage: TestRunner <logic type> <test type>\n");
+			return;
+		}
+		
+		if (args[0].equals("impl")) {
+			Config.setLogicType(LogicType.IMPL);
+			System.out.print("TESTING YOUR IMPLEMENTATION ");
+		}
+		else if (args[0].equals("buggy")) {
+			Config.setLogicType(LogicType.BUGGY);
+			System.out.print("TESTING BUGGY IMPLEMENTATION ");
+		}
+		else if (args[0].equals("solution")) {
+			Config.setLogicType(LogicType.SOLUTION);
+			System.out.print("TESTING SOLUTION IMPLEMENTATION ");
+		}
+		else {
+			System.out.println("Usage: TestRunner <logic type> <test type>\n");
+			return;
+		}
+		
+		if (args[1].equals("junit")) {
+			Config.setTestType(TestType.JUNIT);
+			System.out.println("WITH PLAIN JUNIT\n");
+		}
+		else if (args[1].equals("jpf")) {
+			Config.setTestType(TestType.JPF_ON_JUNIT);
+			System.out.println("WITH JPF ON JUNIT\n");
+		}
+		else {
+			System.out.println("\nUsage: TestRunner <logic type> <test type>\n");
+			return;
 		}
 
 		ArrayList<Class> classesToTest = new ArrayList<Class>();

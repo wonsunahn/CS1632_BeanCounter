@@ -7,10 +7,16 @@ public interface BeanCounterLogic {
 	 * @return BeanCounterLogic object
 	 */
 	public static BeanCounterLogic createInstance(int slotCount) {
-		if (Config.getBuggyBeanCounterLogic()) {
-			return new BeanCounterLogicBuggy(slotCount);
-		} else {
+		switch (Config.getLogicType()) {
+		case IMPL:
 			return new BeanCounterLogicImpl(slotCount);
+		case BUGGY:
+			return new BeanCounterLogicBuggy(slotCount);
+		case SOLUTION:
+			return new BeanCounterLogicSolution(slotCount);
+		default:
+			assert(false);
+			return null;
 		}
 	}
 	

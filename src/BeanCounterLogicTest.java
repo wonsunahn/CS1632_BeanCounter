@@ -30,21 +30,30 @@ public class BeanCounterLogicTest {
 	 */
 	@BeforeClass
 	public static void setUp() {
-		/*
-		 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
-		 * beanCount, and isLuck: slotCount should take values 1-5, beanCount should
-		 * take values 0-3, and isLucky should be either true or false. For reference on
-		 * how to use the Verify API, look at:
-		 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
-		 */
-		
+		if(Config.getTestType() == TestType.JUNIT) {
+			slotCount = 5;
+			beanCount = 3;
+			isLuck = true;
+		}
+		else if(Config.getTestType() == TestType.JPF_ON_JUNIT) {
+			/*
+			 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
+			 * beanCount, and isLuck: slotCount should take values 1-5, beanCount should
+			 * take values 0-3, and isLucky should be either true or false. For reference on
+			 * how to use the Verify API, look at:
+			 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
+			 */
+		}
+		else {
+			assert(false);
+		}
 				
 		// Create the internal logic
 		logic = BeanCounterLogic.createInstance(slotCount);
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(slotCount, isLuck, new Random());
+			beans[i] = Bean.createInstance(slotCount, isLuck, new Random(42));
 		}
 		
 		// A failstring useful to pass to assertions to get a more descriptive error.
