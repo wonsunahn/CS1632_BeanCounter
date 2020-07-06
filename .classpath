@@ -40,5 +40,6 @@
 	<classpathentry kind="lib" path="spotbugs-4.0.0-beta4/lib/spotbugs-ant.jar"/>
 	<classpathentry kind="lib" path="spotbugs-4.0.0-beta4/lib/spotbugs.jar"/>
 	<classpathentry kind="lib" path="BeanCounterBuggy.jar"/>
+	<classpathentry kind="lib" path="BeanCounterSolution.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
