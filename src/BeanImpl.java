@@ -33,16 +33,45 @@ import java.util.Random;
  */
 
 public class BeanImpl implements Bean {
-	// TODO: Add member methods and variables as needed
+	
+	// TODO: Add more member variables as needed
+	private int xpos;
 
 	/**
 	 * Constructor - creates a bean in either luck mode or skill mode.
 	 * 
-	 * @param slotCount the number of slots in the machine
-	 * @param isLuck whether the bean is in luck mode
-	 * @param rand   the random number generator
+	 * @param slotCount	the number of slots in the machine
+	 * @param isLuck	whether the bean is in luck mode
+	 * @param rand		the random number generator
 	 */
 	BeanImpl(int slotCount, boolean isLuck, Random rand) {
+		// TODO: Implement
+	}
+	
+	/**
+	 * Returns the current X-coordinate position of the bean in the logical coordinate system.
+	 * 
+	 * @return the current X-coordinate of the bean
+	 */
+	public int getXPos() {
+		// TODO: Implement
+		return 0;
+	}
+
+	/**
+	 * Resets the bean to its initial state. The X-coordinate should be initialized
+	 * to 0. 
+	 */
+	public void reset() {
+		// TODO: Implement
+	}
+	
+	/**
+	 * Chooses left or right randomly (if luck) or according to skill. If the return
+	 * value of rand.nextInt(2) is 0, the bean goes left. Otherwise, the bean goes
+	 * right.  The X-coordinate is updated accordingly.
+	 */
+	public void choose() {
 		// TODO: Implement
 	}
 }

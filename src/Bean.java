@@ -18,8 +18,16 @@ public interface Bean {
 		case SOLUTION:
 			return new BeanSolution(slotCount, isLuck, rand);
 		default:
-			assert(false);
+			assert (false);
 			return null;
 		}
 	}
+	
+	// Public interface of BeanCounterLogic
+	
+	public int getXPos();
+	
+	public void reset();
+	
+	public void choose();
 }
