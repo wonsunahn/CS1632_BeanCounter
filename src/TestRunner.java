@@ -1,54 +1,48 @@
+import java.util.ArrayList;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import java.util.ArrayList;
-
 public class TestRunner {
 	/**
-	 * Main method
+	 * Main method.
 	 *
 	 * @param args IGNORED, kept for compatibility
 	 */
+	@SuppressWarnings("rawtypes")
 	public static void main(String[] args) {
 
 		if (args.length != 2) {
 			System.out.println("Usage: TestRunner <logic type> <test type>\n");
 			return;
 		}
-		
+
 		if (args[0].equals("impl")) {
 			Config.setLogicType(LogicType.IMPL);
 			System.out.print("TESTING YOUR IMPLEMENTATION ");
-		}
-		else if (args[0].equals("buggy")) {
+		} else if (args[0].equals("buggy")) {
 			Config.setLogicType(LogicType.BUGGY);
 			System.out.print("TESTING BUGGY IMPLEMENTATION ");
-		}
-		else if (args[0].equals("solution")) {
+		} else if (args[0].equals("solution")) {
 			Config.setLogicType(LogicType.SOLUTION);
 			System.out.print("TESTING SOLUTION IMPLEMENTATION ");
-		}
-		else {
+		} else {
 			System.out.println("Usage: TestRunner <logic type> <test type>\n");
 			return;
 		}
-		
+
 		if (args[1].equals("junit")) {
 			Config.setTestType(TestType.JUNIT);
 			System.out.println("WITH PLAIN JUNIT\n");
-		}
-		else if (args[1].equals("jpf")) {
+		} else if (args[1].equals("jpf")) {
 			Config.setTestType(TestType.JPF_ON_JUNIT);
 			System.out.println("WITH JPF ON JUNIT\n");
-		}
-		else {
+		} else {
 			System.out.println("\nUsage: TestRunner <logic type> <test type>\n");
 			return;
 		}
 
 		ArrayList<Class> classesToTest = new ArrayList<Class>();
-		boolean anyFailures = false;
 
 		// ADD ANY CLASSES YOU WISH TO TEST HERE
 		classesToTest.add(BeanCounterLogicTest.class);
@@ -63,17 +57,7 @@ public class TestRunner {
 
 			for (Failure f : r.getFailures()) {
 				System.out.println(f.toString());
-				//System.out.println(f.getTrace());
-			}
-
-			// If r is not successful, there was at least one
-			// failure. Thus, set anyFailures to true - this
-			// can never be set back to false (no amount of
-			// successes will ever eclipse the fact that there
-			// was at least one failure.
-
-			if (!r.wasSuccessful()) {
-				anyFailures = true;
+				// System.out.println(f.getTrace());
 			}
 
 		}

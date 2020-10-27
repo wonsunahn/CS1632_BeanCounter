@@ -1,5 +1,5 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.FlowLayout;
+import javax.swing.JPanel;
 
 public class ButtonPanel extends JPanel {
 

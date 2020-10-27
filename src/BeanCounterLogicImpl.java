@@ -1,9 +1,4 @@
-import gov.nasa.jpf.vm.Verify;
-
-import java.util.Arrays;
 import java.util.Formatter;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
 
 /**
@@ -118,12 +113,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 
 	/**
 	 * A hard reset. Initializes the machine with the passed beans. The machine
-	 * starts with one bean at the top. Note: the Bean interface does not have any
-	 * methods except the constructor, so you will need to downcast the passed Bean
-	 * objects to BeanImpl objects to be able to work with them. This is always safe
-	 * by construction (always, BeanImpl objects are created with
-	 * BeanCounterLogicImpl objects and BeanBuggy objects are created with
-	 * BeanCounterLogicBuggy objects according to the Config class).
+	 * starts with one bean at the top.
 	 * 
 	 * @param beans array of beans to add to the machine
 	 */

@@ -1,11 +1,7 @@
-import static org.junit.Assert.*;
-
-import gov.nasa.jpf.vm.Verify;
+import java.util.Random;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Random;
 
 /**
  * Code by @author Wonsun Ahn
