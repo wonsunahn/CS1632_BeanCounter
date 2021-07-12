@@ -139,7 +139,11 @@ public class BeanCounterLogicTest {
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
 	 *                  Call logic.lowerHalf().
-	 * Invariants: After calling logic.lowerHalf(),
+	 * Invariants: After the machine terminates,
+	 *             remaining bean count is 0
+	 *             in-flight bean count is 0
+	 *             in-slot bean count is beanCount.
+	 *             After calling logic.lowerHalf(),
 	 *             slots in the machine contain only the lower half of the original beans.
 	 *             Remember, if there were an odd number of beans, (N+1)/2 beans should remain.
 	 *             Check each slot for the expected number of beans after having called logic.lowerHalf().
@@ -154,8 +158,12 @@ public class BeanCounterLogicTest {
 	 * Preconditions: None.
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 *                  Call logic.lowerHalf().
-	 * Invariants: After calling logic.upperHalf(),
+	 *                  Call logic.upperHalf().
+	 * Invariants: After the machine terminates,
+	 *             remaining bean count is 0
+	 *             in-flight bean count is 0
+	 *             in-slot bean count is beanCount.
+	 *             After calling logic.upperHalf(),
 	 *             slots in the machine contain only the upper half of the original beans.
 	 *             Remember, if there were an odd number of beans, (N+1)/2 beans should remain.
 	 *             Check each slot for the expected number of beans after having called logic.upperHalf().
