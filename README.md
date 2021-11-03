@@ -24,15 +24,15 @@ DUE: December 17 (Friday), 2021 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** TBD
+**GitHub Classroom Link:** https://classroom.github.com/a/NeXmTPPx
 
 ## Overview
 
-For this final deliverable, you will develop a full-fledged GUI program (with
-the help of some skeleton code), along with various tests.  Don't worry if you
-don't know GUI programming --- that part has already been done for you.  In
-addition, there is a [Text UI mode](#text-ui-mode) that you can use to test
-and debug most of your program.
+For this final deliverable, you will develop a full-fledged GUI program
+(with the help of some skeleton code), along with various tests.  Don't
+worry if you don't know GUI programming --- that part has already been done
+for you.  In addition, there is a [Text UI mode](#text-ui-mode) that you can
+use to manual test and debug your program.
 
 All the projects so far have used some form of dynamic testing.  In this
 project, we will focus grading on static testing.  You will be graded
