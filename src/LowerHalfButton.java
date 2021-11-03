@@ -1,11 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 
 public class LowerHalfButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +13,14 @@ public class LowerHalfButton extends JButton {
 	 */
 	public LowerHalfButton(MainPanel m) {
 		super("Lower Half");
-		_m = m;
+		this.mainPanel = m;
 		addActionListener(new LowerHalfButtonListener());
 	}
 
 	class LowerHalfButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.lowerHalf();
+			mainPanel.lowerHalf();
 		}
 	}
 

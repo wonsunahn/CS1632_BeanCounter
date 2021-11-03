@@ -1,11 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 
 public class StepButton extends JButton {
 
-	private MainPanel _m;
+	private MainPanel mainPanel;
 
 	/**
 	 * Constructor - Adds a listener to the button.
@@ -14,14 +13,14 @@ public class StepButton extends JButton {
 	 */
 	public StepButton(MainPanel m) {
 		super("Step");
-		_m = m;
+		mainPanel = m;
 		addActionListener(new StepButtonListener());
 	}
 
 	class StepButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			_m.step();
+			mainPanel.step();
 		}
 	}
 

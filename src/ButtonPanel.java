@@ -1,26 +1,28 @@
-import java.awt.*;
-import javax.swing.*;
+import java.awt.FlowLayout;
+import javax.swing.JPanel;
 
 public class ButtonPanel extends JPanel {
 
-	private StepButton _step;
+	private StepButton step;
 
-	private RunSlowButton _slow;
+	private RunSlowButton slow;
 	
-	private RunFastButton _fast;
+	private RunFastButton fast;
 
-	private StopButton _stop;
+	private StopButton stop;
 
-	private LowerHalfButton _lower;
+	private LowerHalfButton lower;
 	
-	private UpperHalfButton _upper;
+	private UpperHalfButton upper;
 	
-	private RepeatButton _repeat;
+	private RepeatButton repeat;
 	
-	private ResetButton _clear;
+	private ResetButton clear;
 
 	/**
 	 * Constructor - add all of the buttons to the ButtonPanel.
+	 * 
+	 * @param m the main panel above the button panel
 	 */
 
 	public ButtonPanel(MainPanel m) {
@@ -28,26 +30,26 @@ public class ButtonPanel extends JPanel {
 		// Send a reference to the Main Panel
 		// to all of the buttons.
 
-		_step = new StepButton(m);
-		_slow = new RunSlowButton(m);
-		_fast = new RunFastButton(m);
-		_stop = new StopButton(m);
-		_lower = new LowerHalfButton(m);
-		_upper = new UpperHalfButton(m);
-		_repeat = new RepeatButton(m);
-		_clear = new ResetButton(m);
+		step = new StepButton(m);
+		slow = new RunSlowButton(m);
+		fast = new RunFastButton(m);
+		stop = new StopButton(m);
+		lower = new LowerHalfButton(m);
+		upper = new UpperHalfButton(m);
+		repeat = new RepeatButton(m);
+		clear = new ResetButton(m);
 		setLayout(new FlowLayout());
 
 		// Add all of the buttons
 
-		add(_step);
-		add(_slow);
-		add(_fast);
-		add(_stop);
-		add(_lower);
-		add(_upper);
-		add(_repeat);
-		add(_clear);
+		add(step);
+		add(slow);
+		add(fast);
+		add(stop);
+		add(lower);
+		add(upper);
+		add(repeat);
+		add(clear);
 	}
 
 }
