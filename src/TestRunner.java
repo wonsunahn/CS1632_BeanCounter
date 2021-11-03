@@ -43,6 +43,7 @@ public class TestRunner {
 		}
 
 		ArrayList<Class> classesToTest = new ArrayList<Class>();
+		classesToTest.add(GradeScopeTest.class);
 
 		// ADD ANY CLASSES YOU WISH TO TEST HERE
 		classesToTest.add(BeanCounterLogicTest.class);

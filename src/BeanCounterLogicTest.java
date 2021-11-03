@@ -60,7 +60,7 @@ public class BeanCounterLogicTest {
 	}
 
 	/**
-	 * Test case for void void reset(Bean[] beans).
+	 * Test case for void reset(Bean[] beans).
 	 * Preconditions: None.
 	 * Execution steps: Call logic.reset(beans).
 	 * Invariants: If beanCount is greater than 0,

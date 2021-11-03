@@ -18,13 +18,13 @@
   * [Resources](#resources)
   
 # CS 1632 - Software Quality Assurance
-Summer Semester 2021
+Fall Semester 2021
 
-DUE: August 7 (Saturday), 2021 11:59 PM
+DUE: December 17 (Friday), 2021 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** https://classroom.github.com/g/TW1HxFPT
+**GitHub Classroom Link:** TBD
 
 ## Overview
 
@@ -458,7 +458,7 @@ JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) -
 ====================================================== system under test
 TestRunner.main()
 
-====================================================== search started: 3/28/20 3:34 AM
+====================================================== search started: 10/28/21 3:34 AM
 Failure in (slotCount=0, beanCount=0, isLucky=false):
 
 ====================================================== results
@@ -474,7 +474,7 @@ instructions:       71197
 max memory:         245MB
 loaded code:        classes=273,methods=3905
 
-====================================================== search finished: 3/28/20 3:34 AM
+====================================================== search finished: 10/28/21 3:34 AM
 ```
 
 After inserting the Verify calls, JPF should give you an output like this:
@@ -486,7 +486,7 @@ JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) -
 ====================================================== system under test
 TestRunner.main()
 
-====================================================== search started: 3/28/20 3:39 AM
+====================================================== search started: 10/28/21 3:39 AM
 Failure in (slotCount=1, beanCount=0, isLucky=false):
 Failure in (slotCount=1, beanCount=0, isLucky=true):
 Failure in (slotCount=1, beanCount=1, isLucky=false):
@@ -529,7 +529,7 @@ implementation.  Here is how.
     ====================================================== system under test
     TestRunner.main("impl","jpf")
 
-    ====================================================== search started: 7/6/20 3:51 PM
+    ====================================================== search started: 10/29/21 3:51 PM
     TESTING YOUR IMPLEMENTATION WITH JPF ON JUNIT
 
     testReset(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=1, isLucky=false): expected:<1> but was:<0>
@@ -561,7 +561,7 @@ implementation.  Here is how.
     max memory:         245MB
     loaded code:        classes=289,methods=4076
 
-    ====================================================== search finished: 7/6/20 3:51 PM
+    ====================================================== search finished: 10/29/21 3:51 PM
     ```
 
 1. To test the BeanCounterLogicSolution implementation on Windows:
@@ -584,7 +584,7 @@ implementation.  Here is how.
     ====================================================== system under test
     TestRunner.main("solution","jpf")
     
-    ====================================================== search started: 7/23/20 2:53 PM
+    ====================================================== search started: 10/29/21 2:53 PM
     TESTING SOLUTION IMPLEMENTATION WITH JPF ON JUNIT
     
     
@@ -601,7 +601,7 @@ implementation.  Here is how.
     max memory:         700MB
     loaded code:        classes=334,methods=4665
     
-    ====================================================== search finished: 7/23/20 2:53 PM
+    ====================================================== search finished: 10/29/21 2:53 PM
     ```
 
 1. To test the BeanCounterLogicBuggy implementation on Windows:
@@ -624,7 +624,7 @@ implementation.  Here is how.
     ====================================================== system under test
     TestRunner.main("buggy","jpf")
 
-    ====================================================== search started: 3/28/20 3:24 AM
+    ====================================================== search started: 10/28/21 3:24 AM
     TESTING BUGGY IMPLEMENTATION WITH JPF ON JUNIT
 
     testAdvanceStepCoordinates(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
@@ -647,7 +647,7 @@ implementation.  Here is how.
     max memory:         700MB
     loaded code:        classes=343,methods=4714
 
-    ====================================================== search finished: 3/28/20 3:24 AM
+    ====================================================== search finished: 10/28/21 3:24 AM
     ```    
 
 What to do when you see a failure?  Now you want to zero in on the path that
