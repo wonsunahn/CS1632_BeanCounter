@@ -300,19 +300,28 @@ you should perform them.
 
 ### Plain JUnit Testing
 
-Complete BeanCounterLogicTest.java by filling in the @Test methods marked by
-the // TODO comments.  Pay close attention to the invariants you are asked to
-test described in the Javadoc comment above each @Test method.
+Start by completing the tests in [GradeScopeTest.java](src/GradeScopeTest.java)
+by replacing the // TODO comments.  One test testReset() is already implemented
+for you.  These are the tests that GradeScope is going to run to verify your
+implementation.
 
-Note that we are not mocking the Beans objects, even though the Bean class is
+Note that we are not mocking the Bean objects, even though the Bean class is
 an external class from the perspective of the BeanCounterLogicImpl class that
 we are testing.  This is intentional.  In this case, I made a conscious
 decision that I wanted to systems test the entire application, instead of
 mocking external objects to enforce unit testing.
 
-Once you complete BeanCounterLogicTest, you will be able to test it against
-your BeanCounterLogicImpl implementation, a buggy implementation, and the
-solution implementation.  Here is how.
+Next, complete [BeanCounterLogicTest.java](src/BeanCounterLogicTest.java) by
+again replacing the // TODO comments.  Again, we are not mocking the Bean
+objects for the same reason.  Pay close attention to the invariants you are
+asked to test described in the Javadoc comment above each @Test method.  Note
+that when the configured test type is TestType.JUNIT, this class operates as a
+plain JUnit test.  Only when it is configured with test type
+TestType.JPF_ON_JUNIT will it run with JPF.
+
+Using the TestRunner, You are able to test both GradeScopeTest and
+BeanCounterLogicTest against your BeanCounterLogicImpl implementation, a buggy
+implementation, and the solution implementation.  Here is how.
 
 1. To test your BeanCounterLogicImpl implementation on Windows:
 
@@ -326,15 +335,24 @@ solution implementation.  Here is how.
     $ bash runJUnit.sh
     ```
 
-    Since your implementation is mostly incomplete, it should display some failures as below:
+    When you run this initially, it should display the below:
 
     ```
     TESTING YOUR IMPLEMENTATION WITH PLAIN JUNIT
 
-    testReset(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<2> but was:<0>
-    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<3> but was:<0>
-    ...
+    [GradeScopeTest]
+
+    testReset(GradeScopeTest): [Slot Count = 1] Test case with 2 initial beans failed. Check on remaining bean count expected:<1> but was:<0>
+    [BeanCounterLogicTest]
+
+    Failure in (slotCount=5, beanCount=3, isLucky=true):
     ```
+
+    The first line is a failure on testReset in GradeScopeTest.java, which
+naturally failed because you have not yet implemented the reset(Bean[]) method.
+The second line is a println in the BeanCounterLogicTest.java testReset()
+method of the failString just to show you how it looks like.  As you implement
+more tests, you would get more failures.
 
 1. To test the BeanCounterLogicSolution implementation on Windows:
 
@@ -351,8 +369,16 @@ solution implementation.  Here is how.
     Since this is the defect-free solution implementation, it should not display any failures:
 
     ```
-    TESTING SOLUTION IMPLEMENTATION WITH PLAIN JUNIT
+    TESTING BUGGY IMPLEMENTATION WITH PLAIN JUNIT
+
+    [GradeScopeTest]
+
+    [BeanCounterLogicTest]
+
+    Failure in (slotCount=5, beanCount=3, isLucky=true):
     ```
+
+    Note the failure on testReset is gone.  All your other tests should pass as well.
 
 1. To test the buggy BeanCounterLogicBuggy implementation on Windows:
 
@@ -366,13 +392,23 @@ solution implementation.  Here is how.
     $ bash runJUnitBuggy.sh
     ```
 
-    The thing is, even after having completed the JUnit tests, just plain JUnit testing will not display any failures even though this is a buggy implementation:
+    The output does not display the testReset failure either.  
 
     ```
     TESTING BUGGY IMPLEMENTATION WITH PLAIN JUNIT
+
+    [GradeScopeTest]
+
+    [BeanCounterLogicTest]
+
+    Failure in (slotCount=5, beanCount=3, isLucky=true):
     ```
 
-    But there are bugs!  To see them with your own eyes, you only need to try invoking the main method inside
+    So the reset(Bean[]) method is correct apparently, but many parts are not.
+Most of the bugs in this buggy implementation will remain hidden until we do
+rigorous state space exploration using JPF.
+
+    To see the bugs with your own eyes, you only need to try invoking the main method inside
 BeanCounterLogicBuggy to see that something is not quite right:
 
     ```
@@ -380,13 +416,7 @@ BeanCounterLogicBuggy to see that something is not quite right:
     ```
 
     Note that there are a lot of beans in the first slot for some reason.
-There are also other defects lurking inside.  Why wasn't plain JUnit testing
-able to find these bugs?  Because JUnit testing is not exhaustive.  As can be
-seen in the setUp() method, only a particular machine configuration is chosen
-for testing (5 slots, 3 beans, luck mode).  Besides, we chose 42 as the seed
-for the Random number generator, but we could have gotten a different result if
-we chose a different seed.  Here is where model checking and the Java Path
-Finder (JPF) comes in.
+There are also other defects lurking inside.  We need JPF to find these bugs.
 
 ### Model Checking Using JUnit
 
@@ -507,7 +537,9 @@ and it will tell you which configuration led to the failure.
 
 Now you can run the combination of JPF and JUnit against your
 BeanCounterLogicImpl implementation, a buggy implementation, and the solution
-implementation.  Here is how.
+implementation.  Here is how.  Note: GradeScopeTest.java does not do
+property-based testing and is not built to run with JPF so it excluded from
+runs using JPF.
 
 1. To test your BeanCounterLogicImpl implementation on Windows:
 
@@ -784,14 +816,16 @@ until you don't get deductions.
 
 ## GradeScope Feedback
 
-It is encouraged that you submit to GradeScope early and often.  Please use the feedback you get on each submission to improve your code!
+It is encouraged that you submit to GradeScope early and often.  Please use the
+feedback you get on each submission to improve your code!
 
 The GradeScope autograder works in 5 phases:
 
 1. BeanCounterLogicImpl.java functionality testing  
 
     The purpose of this phase is to test BeanCounterLogicImpl for defects.  I
-do this by running a set of JUnit tests against BeanCounterLogicImpl methods.
+do this by running the JUnit class
+[GradeScopeTest.java](src/GradeScopeTest.java) against BeanCounterLogicImpl.
 On a failure, read the feedback to get a hint on which situation led to the
 defect.
 

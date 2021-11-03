@@ -36,7 +36,7 @@ public class GradeScopeTest {
 	private Bean[] createBeans(int slotCount, int beanCount, boolean luck) {
 		Bean[] beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = new BeanImpl(slotCount, luck, rand);
+			beans[i] = Bean.createInstance(slotCount, luck, rand);
 		}
 		return beans;
 	}
@@ -64,7 +64,7 @@ public class GradeScopeTest {
 	public void setUp() {
 		logics = new BeanCounterLogic[logicSlotCounts.length];
 		for (int i = 0; i < logics.length; i++) {
-			logics[i] = new BeanCounterLogicImpl(logicSlotCounts[i]);
+			logics[i] = BeanCounterLogic.createInstance(logicSlotCounts[i]);
 		}
 		rand = new Random(42);		
 	}
