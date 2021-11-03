@@ -6,9 +6,11 @@
     + [Skill Mode](#skill-mode)
     + [Text UI Mode](#text-ui-mode)
   * [What to do](#what-to-do)
+    + [Plain JUnit Testing](#plain-junit-testing)
     + [Model Checking Using JUnit](#model-checking-using-junit)
+    + [Add an Extra Invariant Test](#add-an-extra-invariant-test)
     + [Coding](#coding)
-    + [Static Testing](#static-testing)
+    + [Linting and Auditing](#linting-and-auditing)
     + [Manual System Testing](#manual-system-testing)
   * [Grading](#grading)
   * [Submission](#submission)
@@ -16,27 +18,33 @@
   * [Resources](#resources)
   
 # CS 1632 - Software Quality Assurance
-Summer Semester 2020
+Summer Semester 2021
 
-DUE: July 31, 2020 06:00 PM
+DUE: August 7 (Saturday), 2021 11:59 PM
 
-Due to the grading deadline, there is no late submission.
+Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
+
+**GitHub Classroom Link:** https://classroom.github.com/g/TW1HxFPT
 
 ## Overview
 
-For this final deliverable, you will develop a full-fledged
-GUI program (with the help of some skeleton code), along with various tests.
-Don't worry if you don't know GUI programming --- that part has already been
-done for you.
+For this final deliverable, you will develop a full-fledged GUI program (with
+the help of some skeleton code), along with various tests.  Don't worry if you
+don't know GUI programming --- that part has already been done for you.  In
+addition, there is a [Text UI mode](#text-ui-mode) that you can use to test
+and debug most of your program.
 
 All the projects so far have used some form of dynamic testing.  In this
-project, we will focus on static testing.  You are still well-advised to use
-all the techniques we have learned so far: test-driven development (TDD),
-automated unit testing, code coverage, and manual testing to name a few.  But
-you will not be required to submit a proof of testing.  What you will be graded
+project, we will focus grading on static testing.  You will be graded
 upon is static testing techniques such as: linting, pattern-based bug finding,
-and model checking.  Also, as always, you will be graded upon the quality of
-the software itself.
+and model checking.  
+
+But you are still expected to use all the techniques we have learned so far:
+test-driven development (TDD), automated unit testing, code coverage, and
+manual testing to name a few to come up with good quality software.  The
+GradeScope autograder will do extensive testing to test various features of
+the software.  If any of the tests fail, that means you have not thoroughly
+tested your software.
 
 * IMPORTANT: You need Java 8 (1.8.0.231, preferably) to run the Java Path
   Finder model checker.  Make sure you have the correct Java version by doing
@@ -76,8 +84,8 @@ cannot be explained, because there was no reason for the change to begin with.
 The change in data can just be due to a statistical anomaly called "regression
 to the mean".  For example, an answer to question 3 can simply be that the
 student was exceptionally lucky during the midterms (she guessed all multiple
-choices and she got them all correct).  In the finals, her luck wore just off
-and she just got what she deserved.  This is called regression to the mean.
+choices and she got them all correct).  In the finals, her luck just wore off
+and she got what she deserved.  This is called regression to the mean.
 When a data point is on the extremes of the bell curve, it is often not because
 there is anything special about that data point, it is because the laws of
 probability worked in favor of it (or against it, depending on context) for
@@ -112,7 +120,7 @@ luck or skill in navigating the bean machine.
 Let's do some exploratory testing.  You could use the class files that you have
 just compiled, but the app doesn't do much at this point because the internal
 logic has not yet been implemented (by you).  Instead, let's use a reference
-implementation (that I wrote) named BeanCounter.jar.
+implementation (that I wrote) named BeanCounterSolution.jar.
 
 ### Luck Mode
 
@@ -121,9 +129,9 @@ Galton: a bean has an equal chance of going left or right on a peg.  So where
 the bean lands at the bottom is purely due to luck.  Hence, you would expect
 the beans to be heavily susceptible to regression to the mean.  Try the following:
 
-1. Run BeanCounter.jar in luck mode:
+1. Run BeanCounterSolution.jar in luck mode:
 ```
-$ java -jar BeanCounter.jar 500 luck
+$ java -jar BeanCounterSolution.jar 500 luck
 ```
 2. Press the "Fast" button to fast-forward to the end.
 3. Note the average (should be close to 4.5 = 0 + 9 / 2).
@@ -157,9 +165,9 @@ of 7, the bean will go right 7 times then go left twice.  So where the bean
 lands at the bottom would be determined entirely by the skill level of the
 bean.  Try the following:
 
-1. Run BeanCounter.jar in skill mode:
+1. Run BeanCounterSolution.jar in skill mode:
 ```
-$ java -jar BeanCounter.jar 500 skill
+$ java -jar BeanCounterSolution.jar 500 skill
 ```
 2. Press the "Fast" button to fast-forward to the end.
 3. Note the average (should be close to 4.5 = 0 + 9 / 2).
@@ -192,7 +200,7 @@ method.  This main() method is used to provide a rudimentary text user
 interface.  You can invoke it by doing:
 
 ```
-java -cp BeanCounter.jar BeanCounterLogicImpl 10 500 luck debug
+java -cp BeanCounterSolution.jar BeanCounterLogicSolution 10 500 luck debug
 ```
 
 This is the usage information that gets printed when you don't pass any arguments:
@@ -215,59 +223,199 @@ $ java -cp bin BeanCounterLogicImpl 10 500 luck debug
 
 ## What to do
 
+Here is a list of files and their contents:
+
+* BeanCounterLogicImpl.java - The core logic of the bean machine.  Maintains a
+  list of beans that fall one step in the machine whenever advanceStep() is
+called.  Maps beans into a logical coordinate system.  Also contains a main
+method which implements the Text UI of the program. (**modify**)
+
+* BeanImpl.java - The Bean implementation.  Maintains the x-coordinate of the
+  bean, as well as how many right moves are remaining if in skill mode.
+Governs the movement of that particular bean when choose() is called, depending
+on whether the bean is a skilled bean or a lucky bean.  The Random number
+generator that gives randomness to the movement is injected in the BeanImpl
+constructor for easier testing. (**modify**)
+
+* BeanCounterLogicTest.java - The JUnit test class for the BeanCounterLogicImpl
+  class.  Depending on Config, it either runs in plain JUnit mode or JPF on
+JUnit mode as can be seen in the setUp() method.  In plain JUnit mode, a
+particular machine configuration is chosen for testing (5 slots, 3 beans, luck
+mode).  Also the Random number generator is seeded with 42 to make tests
+reproducible.  In JPF on JUnit mode, you are asked to exhaustively test
+different machine configurations (see [Model Checking Using
+JUnit](#model-checking-using-junit)) and all random numbers will be
+exhaustively tested too. (**modify**)
+
+* Config.java - The high level configuration of the program.  Controls
+  LogicType (your impl, buggy, or solution) and TestType (plain JUnit or JPF on
+JUnit).
+
+* BeanCounterLogic.java - The public interface of BeanCounterLogic.  The
+  createInstance method creates an instance of BeanCounterLogicImpl (your
+code), BeanCounterLogicBuggy (a buggy implementation), or
+BeanCounterLogicSolution (the solution implementation) based on Config.  Do not
+modify.
+
+* Bean.java - The public interface of Bean.  The createInstance method creates
+  an instance of BeanImpl (your code), BeanBuggy (a buggy implementation), or
+BeanSolution (the solution implementation) based on Config.
+
+* BeanCounterGUI.java - Contains the main method for the GUI interface of the
+  program.  Creates a MainFrame.
+
+* MainFrame.java - Contains the MainPanel and the ButtonPanel.
+
+* MainPanel.java - The main display of the program where all the bean machine
+  animations happen.  Renders the state of BeanCounterLogic on to the window
+coordinate system (the "physical" coordinates).  In the process the logical
+coordinates of Beans are translated to physical coordinates.
+
+* <Some>Button.java - GUI buttons at the bottom of the main frame, along with
+  event handlers when the button is pressed.
+
+* BeanCounterSolution.jar - The solution implementation of bean counter.
+
+* BeanCounterBuggy.jar - A buggy implementation of bean counter.
+
+* compile.bat / compile.sh - Scripts to compile Java source code to bytecode.
+
+* runJUnit\*.bat / runJUnit\*.sh - Scripts to run JUnit tests on bean machine.
+
+* runJPF\*.bat / runJPF\*.sh - Scripts to run JUnit tests on bean machine with JPF enabled.
+
 You are asked to fill in and modify 3 files: BeanCounterLogicImpl.java,
 BeanImpl.java, BeanCounterLogicTest.java.  The first two files complete the
 bean counter implementation.  The last file tests the implementation using the
 Java Path Finder model checker via the JUnit framework.  Take care that you
 limit your modifications to these three files as all the other files will be
-ignored in your submission.  Also, take care that you do not change the method
-names of pre-existing methods as GradeScope relies on them to exist.
+ignored in your submission.  Also, take care that you do not change the public
+interfaces of BeanCounterLogic and Bean as GradeScope relies on them.
 
 I expect you to employ test-driven development (TDD) for this project and fully
 embrace it.  I can guarantee you that it will shorten development time.  You
 are going to write the tests anyway.  Why not write them at the beginning when
-they will be much more useful?  I will lay down the steps, roughly in the order
+they will be the most useful?  I will lay down the steps, roughly in the order
 you should perform them.
+
+### Plain JUnit Testing
+
+Complete BeanCounterLogicTest.java by filling in the @Test methods marked by
+the // TODO comments.  Pay close attention to the invariants you are asked to
+test described in the Javadoc comment above each @Test method.
+
+Note that we are not mocking the Beans objects, even though the Bean class is
+an external class from the perspective of the BeanCounterLogicImpl class that
+we are testing.  This is intentional.  In this case, I made a conscious
+decision that I wanted to systems test the entire application, instead of
+mocking external objects to enforce unit testing.
+
+Once you complete BeanCounterLogicTest, you will be able to test it against
+your BeanCounterLogicImpl implementation, a buggy implementation, and the
+solution implementation.  Here is how.
+
+1. To test your BeanCounterLogicImpl implementation on Windows:
+
+    ```
+    $ runJUnit.bat
+    ```
+
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJUnit.sh
+    ```
+
+    Since your implementation is mostly incomplete, it should display some failures as below:
+
+    ```
+    TESTING YOUR IMPLEMENTATION WITH PLAIN JUNIT
+
+    testReset(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<2> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<3> but was:<0>
+    ...
+    ```
+
+1. To test the BeanCounterLogicSolution implementation on Windows:
+
+    ```
+    $ runJUnitSolution.bat
+    ```
+
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJUnitSolution.sh
+    ```
+
+    Since this is the defect-free solution implementation, it should not display any failures:
+
+    ```
+    TESTING SOLUTION IMPLEMENTATION WITH PLAIN JUNIT
+    ```
+
+1. To test the buggy BeanCounterLogicBuggy implementation on Windows:
+
+    ```
+    $ runJUnitBuggy.bat
+    ```
+
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJUnitBuggy.sh
+    ```
+
+    The thing is, even after having completed the JUnit tests, just plain JUnit testing will not display any failures even though this is a buggy implementation:
+
+    ```
+    TESTING BUGGY IMPLEMENTATION WITH PLAIN JUNIT
+    ```
+
+    But there are bugs!  To see them with your own eyes, you only need to try invoking the main method inside
+BeanCounterLogicBuggy to see that something is not quite right:
+
+    ```
+    java -jar BeanCounterBuggy.jar 20 400 luck
+    ```
+
+    Note that there are a lot of beans in the first slot for some reason.
+There are also other defects lurking inside.  Why wasn't plain JUnit testing
+able to find these bugs?  Because JUnit testing is not exhaustive.  As can be
+seen in the setUp() method, only a particular machine configuration is chosen
+for testing (5 slots, 3 beans, luck mode).  Besides, we chose 42 as the seed
+for the Random number generator, but we could have gotten a different result if
+we chose a different seed.  Here is where model checking and the Java Path
+Finder (JPF) comes in.
 
 ### Model Checking Using JUnit
 
-Write invariant property assertions for the Java Pathfinder (JPF) model
-checker.  You will do this within the JUnit framework in the
-BeanCounterLogicTest.java.
+Exhaustively model check BeanCounterLogic using JPF to find hidden bugs.
 
 Notice that I have intentionally separated out the logic part of the program
-from the GUI.  This was done explicitly to make model checking easier.  Model
-checking a GUI is tricky and so is a multi-threaded event-driven program like
+from the GUI.  This was done to make model checking easier.  Model checking a
+GUI is tricky and so is a multi-threaded event-driven program like
 BeanCounterGUI.  Yes, JPF can model check even multi-threaded programs (!) by
 exhaustively going through all the interleavings.  But it is complicated and it
-takes a long time.  So we will just check the internal logic, which is the
-important part anyway.  You can run JPF by using the following script:
+takes a long time because it has to go through many more states.  So we will
+just check the core logic (BeanCounterLogic), which is the important part
+anyway.
 
-```
-$ runJPF.bat BeanCounter.win.jpf
-```
+These are roughly the steps involved in the testing infrastructure:
 
-Or, if you are using Mac or Linux:
-
-```
-$ runJPF.sh BeanCounter.macos.jpf
-```
-
-What this script does is roughly the following:
-
-1. Launch Java Path Finder and load the target main class (specified in the "target" in BeanCounter.jpf)
+1. Launch Java Path Finder and load the target main class (specified in the "target" in BeanCounter.win.jpf)
 2. In this case, the target is TestRunner and the main method starts to run.
 3. TestRunner subsequently invokes JUnit on your BeanCounterLogicTest class.
 
 What does this mean?  It means JUnit is going to test your test cases one by
-one like always using the assertions you provide, but the Java Path Finder is
-going to explore all the paths your program can take while you are doing that.
-So in the end, this means each of your test cases will actually be run hundreds
-or thousands of times for each of the paths that JPF discovers!  As we learned,
-paths in a program can diverge when a random number is generated (e.g. when
-trying to decide whether a bean should fall left or right).  This way, you can
-even prove nondeterministic programs correct by just trying all paths that your
-program can take, something that regular JUnit testing cannot do.  
+one like always using the assertions you provide, but JPF is going to explore
+all the paths your program can take while you are doing that.  So in the end,
+this means each of your test cases will actually be run hundreds or thousands
+of times for each of the paths that JPF discovers!  As we learned, paths in a
+program can diverge when a random number is generated (e.g. when trying to
+decide whether a bean should fall left or right).  This way, you can even prove
+nondeterministic programs correct by just trying all paths that your program
+can take, something that regular JUnit testing cannot do.  
 
 Also, paths can diverge at tester specified points using the Verify API.  The
 Verify API allows the tester to verify a range of input values.  JPF explores
@@ -284,10 +432,24 @@ apart.  Although the range of values is not exhaustive, these are enough values
 to give us confidence that our machine works, while ensuring that JPF
 terminates within more or less 5 seconds to not lengthen turnaround time.
 
-Currently, all the tests are empty save one: testReset().  That test just
-contains a println statement inserted in order to demonstrate to you all the
-combinations of input values JPF explores.  Initially, JPF should give you an
-output that looks like this:
+The testReset() method contains a println statement inserted in order to
+demonstrate to you all the combinations of input values JPF explores.  Let's
+see what it prints out initially without Verify API calls.  Try the following
+command.
+
+On Windows:
+
+```
+$ runJPFSolution.bat BeanCounter.win.jpf
+```
+
+Or on Mac or Linux:
+
+```
+$ bash runJPFSolution.sh BeanCounter.macos.jpf
+```
+
+That should print out an output like the following:
 
 ```
 JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
@@ -316,6 +478,7 @@ loaded code:        classes=273,methods=3905
 ```
 
 After inserting the Verify calls, JPF should give you an output like this:
+
 ```
 JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
 
@@ -333,42 +496,185 @@ Failure in (slotCount=1, beanCount=2, isLucky=false):
 [Truncated for brevity]
 ```
 
-Please remove the println in your final submission.  Instead, you should put in
-assertions that check the invariant properties described in the Javadoc comment
-above each test method.  Note that these are invariant properties that hold
-invariably regardless of the combination of input values that is currently
-being explored.  Please use the JUnit assert API to insert the assertions as we
-have been doing so far (not the Java assert keyword).  Also, I recommend you
-always insert the failString that I initialized for you as the first argument
-of every JUnit assert call so that you get that as part of your failure
-message.  The failString contains the input values that are being currently
-tested and it will tell you which combination led to the failure.
+Please remove the println in your final submission.
+
+Now we are confident that all our @Test JUnit methods will benefit from
+exhaustive testing.  If you haven't already, I recommend you always insert the
+failString that I initialized for you as the first argument of every JUnit
+assert call so that you get that as part of your failure message.  The
+failString describes the machine configuration that are being currently tested
+and it will tell you which configuration led to the failure.
+
+Now you can run the combination of JPF and JUnit against your
+BeanCounterLogicImpl implementation, a buggy implementation, and the solution
+implementation.  Here is how.
+
+1. To test your BeanCounterLogicImpl implementation on Windows:
+
+    ```
+    $ runJPF.bat BeanCounter.win.jpf
+    ```
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJPF.sh BeanCounter.macos.jpf
+    ```
+
+    Sicne this is before doing any implementation, you will see the same failures we saw for plain JUnit testing, except this time for many different machine configurations:
+
+    ```
+    JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
+
+
+    ====================================================== system under test
+    TestRunner.main("impl","jpf")
+
+    ====================================================== search started: 7/6/20 3:51 PM
+    TESTING YOUR IMPLEMENTATION WITH JPF ON JUNIT
+
+    testReset(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=1, isLucky=false): expected:<1> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=1, isLucky=false): expected:<1> but was:<0>
+    testReset(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=1, isLucky=true): expected:<1> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=1, isLucky=true): expected:<1> but was:<0>
+    testReset(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=2, isLucky=false): expected:<1> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=2, isLucky=false): expected:<2> but was:<0>
+    testReset(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=2, isLucky=true): expected:<1> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=1, beanCount=2, isLucky=true): expected:<2> but was:<0>
+
+    ...
+
+    testReset(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=false): expected:<2> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=false): expected:<3> but was:<0>
+    testReset(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<2> but was:<0>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=5, beanCount=3, isLucky=true): expected:<3> but was:<0>
+
+    ====================================================== results
+    no errors detected
+
+    ====================================================== statistics
+    elapsed time:       00:00:01
+    states:             new=67,visited=0,backtracked=67,end=40
+    search:             maxDepth=5,constraints=0
+    choice generators:  thread=2 (signal=0,lock=1,sharedRef=0,threadApi=0,reschedule=1), data=26
+    heap:               new=21129,released=24445,maxLive=1724,gcCycles=42
+    instructions:       911286
+    max memory:         245MB
+    loaded code:        classes=289,methods=4076
+
+    ====================================================== search finished: 7/6/20 3:51 PM
+    ```
+
+1. To test the BeanCounterLogicSolution implementation on Windows:
+
+    ```
+    $ runJPFSolution.bat BeanCounter.win.jpf
+    ```
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJPFSolution.sh BeanCounter.macos.jpf
+    ```
+
+    BeanCounterLogicSolution is a complete correct implementation, so you should see no failures:
+
+    ```
+    JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
+    
+    
+    ====================================================== system under test
+    TestRunner.main("solution","jpf")
+    
+    ====================================================== search started: 7/23/20 2:53 PM
+    TESTING SOLUTION IMPLEMENTATION WITH JPF ON JUNIT
+    
+    
+    ====================================================== results
+    no errors detected
+    
+    ====================================================== statistics
+    elapsed time:       00:00:06
+    states:             new=4161,visited=3533,backtracked=7694,end=468
+    search:             maxDepth=65,constraints=0
+    choice generators:  thread=3 (signal=0,lock=1,sharedRef=0,threadApi=0,reschedule=2), data=3839
+    heap:               new=384143,released=243001,maxLive=2325,gcCycles=7669
+    instructions:       15039902
+    max memory:         700MB
+    loaded code:        classes=334,methods=4665
+    
+    ====================================================== search finished: 7/23/20 2:53 PM
+    ```
+
+1. To test the BeanCounterLogicBuggy implementation on Windows:
+
+    ```
+    $ runJPFBuggy.bat BeanCounter.win.jpf
+    ```
+    Or on Mac or Linux:
+
+    ```
+    $ bash runJPFBuggy.sh BeanCounter.macos.jpf
+    ```
+
+    Now JPF uncovers some hidden defects that we missed before in plain JUnit testing:
+
+    ```
+    JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
+
+
+    ====================================================== system under test
+    TestRunner.main("buggy","jpf")
+
+    ====================================================== search started: 3/28/20 3:24 AM
+    TESTING BUGGY IMPLEMENTATION WITH JPF ON JUNIT
+
+    testAdvanceStepCoordinates(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
+    testLowerHalf(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
+    testAdvanceStepBeanCount(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
+    testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
+    testUpperHalf(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
+    testRepeat(BeanCounterLogicTest): Failure in (slotCount=4, beanCount=3, isLucky=false): expected:<3> but was:<2>
+
+    ====================================================== results
+    no errors detected
+
+    ====================================================== statistics
+    elapsed time:       00:00:06
+    states:             new=4155,visited=3529,backtracked=7684,end=467
+    search:             maxDepth=65,constraints=0
+    choice generators:  thread=3 (signal=0,lock=1,sharedRef=0,threadApi=0,reschedule=2), data=3834
+    heap:               new=383657,released=242713,maxLive=2321,gcCycles=7659
+    instructions:       15150745
+    max memory:         700MB
+    loaded code:        classes=343,methods=4714
+
+    ====================================================== search finished: 3/28/20 3:24 AM
+    ```    
 
 What to do when you see a failure?  Now you want to zero in on the path that
 caused you the failure.  The failString tells you the combination of input
-values that caused the failure, so you can temporarily comment out the Verify
-API calls and replace them with those concrete input values.  Once you remove
-the Verify calls, this suddenly becomes a regular JUnit class and you can test
-it straight up by invoking JUnit.  You can do this in the Eclipse IDE or you
-can just run the following script (runJUnit.sh for Mac or Linux):
+values that caused the failure, so you can now modify the hard coded values for
+slotCount, beanCount, and isLuck for plain JUnit testing mode in the
+BeanCounterLogicTest setUp() method to match that configuration.  And try
+running JUnit again:
 
 ```
-$ runJUnit.bat
+$ runJUnit.bat (or bash runJUnit.sh for Mac/Linux)
 ```
 
-But the failure may not occur when you test with JUnit.  This can happen
-because of random number generation.  You can make the test completely
-deterministic by either mocking the Random object passed to Bean or you may
-simply choose to temporarily seed the generator (e.g. new Random(42)).  Once
-you seed the generator, it becomes deterministic, allowing you to reliably test
-and debug your program.  You can try changing the seed until you find the seed
-that triggers the failure.  If this doesn't work, you may have to do some
-digging to find out exactly in which situation the failure occurred within JPF.
-You may do this by adding more information to the failString.  The
-BeanCounterLogicImpl.toString() method may come in handy to get the string
-representation of the machine.  But to make this work, you need to change the
-"fmt.format("%n");" statement to "fmt.format("\\n");" within that method (it's
-just a glitch inside JPF, nothing more nothing less).  
+Now that same failure will likely manifest.  But it is still possible that the
+failure does not occur when you test only with JUnit.  This can happen because
+of random number generation.  JPF exhaustive tests all random numbers but with
+only JUnit, the best we could do is seed the generator (with 42) to make the
+tests reproducible.  A different seed will generate a different sequence of
+random numbers, which can result in a different outcome.  So you may have to
+try changing the seed until you find the seed that triggers the failure.  If
+this doesn't work, you may have to do some digging to find out exactly in which
+situation the failure occurred within JPF.  You may do this by adding more
+information to the failString.  The BeanCounterLogicImpl.toString() method may
+come in handy to get the string representation of the machine.  But to make
+this work, you need to change the "fmt.format("%n");" statement to
+"fmt.format("\\n");" within that method (it's just a glitch inside JPF, nothing
+more nothing less).  
 
 Sometimes there are situations where JUnit emits a failure but the failure did
 not come from an assertion, meaning the failString is not printed and just the
@@ -381,9 +687,7 @@ TestRunner.java:
 System.out.println(f.getTrace());
 ```
 
-After you write the assertions, the model checker should fail since you
-haven't written the code yet.  Write your code towards satisfying the
-assertions.  
+### Add an Extra Invariant Test
 
 _Also add at one more test case of your own that helps you verify some
 invariant property_.  Add that test at the very end.  Make sure you test a new
@@ -393,13 +697,6 @@ test applicable to a specific input combination using if statements, it doesn't
 count.  Make sure that the test case is well documented with a Javadoc comment
 just like other methods.
 
-Finally, note that we are not mocking the Beans objects, even though the Bean
-class is an external class from the perspective of the BeanCounterLogicImpl
-class that we are testing.  This is intentional.  Although in theory we could
-use JPF to model check just the BeanCounterLogicImpl class by mocking the Bean
-objects, in this case I made a conscious decision that I wanted to model check
-the entire application.
-
 ### Coding
 
 All the GUI coding has already been done for you, since some of you are not
@@ -407,9 +704,9 @@ familiar with Java AWT and event-driven programming.  You only need to
 implement the logic of the machine.  All the parts that you have to fill in
 have been commented with // TODO in the files: BeanCounterLogicImpl.java and
 BeanImpl.java.  You will not need to modify any of the other files.  As you are
-coding, regularly run the JPF model checker, both to check that the coded
-feature was properly implemented and that you have not regressed.  Your goal in
-coding should be to make those tests pass.
+coding, regularly run JUnit and the JPF model checker, both to check that the
+coded feature was properly implemented and that you have not regressed.  Your
+goal in coding should be to make those tests pass.
 
 In order to get the bell curve in skill mode, you will have to use the
 Random.nextGaussian() method.  A bell curve is synonymous with normal
@@ -417,7 +714,7 @@ distribution is synonymous with Gaussian distribution, hence the name.  Here is
 the formula you should use:
 
 ```
-SKILL_AVERAGE = (double) SLOT_COUNT * 0.5
+SKILL_AVERAGE = (double) (SLOT_COUNT - 1) * 0.5
 SKILL_STDEV = (double) Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5))
 SKILL_LEVEL = (int) Math.round(rand.nextGaussian() * SKILL_STDEV + SKILL_AVERAGE)
 ```
@@ -428,7 +725,7 @@ binomial distribution created by "luck" mode.  If you are curious about how
 those values were computed, refer to this [Wikipedia section on binomial
 distribution approximation](https://en.wikipedia.org/wiki/Binomial_distribution#Normal_approximation).
 
-### Static Testing
+### Linting and Auditing
 
 Run the CheckStyle linter and the SpotBugs tool regularly while and after
 coding.  When you are done, both tools should show a successful audit:
@@ -461,7 +758,7 @@ Even after doing model checking, you still need to verify that the program
 testing so you will do manual testing for this.  Refer to the
 [requirements.md](requirements.md) file for the features that need testing.  I
 am not going to make you write a test plan for this, but you will be graded on
-how closely the GUI follows the requirements as demonstrated in BeanCounter.jar
+how closely the GUI follows the requirements as demonstrated in BeanCounterSolution.jar
 
 ## Grading
 
@@ -476,20 +773,14 @@ points.  Also, plagiarism will get you a zero for the project.
 
 ## Submission
 
-This is an individual submission.  Do not work together with your partner in
-any manner.  You are free to discuss and shared code for your exercises with
-your partner (or any other student), and that is the extent to which you should
-collaborate.  If you know how to do the exercises, there is no reason you
-should have difficulty.
-
 You will create a GitHub repository just for deliverable 5.  Make sure you keep
 the repository *PRIVATE* so that nobody else can access your repository.  Once
 you are done modifying code, don't forget to commit and push your changes to
 the github repository.  Submit your GitHub repository to GradeScope at the
-"Deliverable 5 GitHub" link.  Once you submit, GradeScope will run the
-autograder to grade you and give feedback.  If you get deductions, fix your
-code based on the feedback and resubmit.  Repeat until you don't get
-deductions.
+"Deliverable 5 GitHub" link.  Don't forget to add your partner, if you have one.
+Once you submit, GradeScope will run the autograder to grade you and give feedback.
+If you get deductions, fix your code based on the feedback and resubmit.  Repeat
+until you don't get deductions.
 
 ## GradeScope Feedback
 
@@ -498,6 +789,7 @@ It is encouraged that you submit to GradeScope early and often.  Please use the 
 The GradeScope autograder works in 5 phases:
 
 1. BeanCounterLogicImpl.java functionality testing  
+
     The purpose of this phase is to test BeanCounterLogicImpl for defects.  I
 do this by running a set of JUnit tests against BeanCounterLogicImpl methods.
 On a failure, read the feedback to get a hint on which situation led to the
@@ -513,77 +805,34 @@ get you a point deduction.
     This phase runs the SpotBugs tool on your class files.  Each warning will
 get you a point deduction.
 
-1. BeanCounterLogicTest on BeanCounterLogicImpl  
-    The purpose of this phase is to test BeanCounterLogicTest itself for
-defects.  Assuming BeanCounterLogicImpl is defect free (as verified in phase
-1.), any test failures in BeanCounterLogicTest while testing
-BeanCounterLogicImpl indicate a bug in BeanCounterLogicTest.
+1. BeanCounterLogicTest on BeanCounterLogicSolution
+
+   The purpose of this phase is to test BeanCounterLogicTest itself for
+defects.  BeanCounterLogicSolution is the class used in the implementation of
+BeanCounterSolution.jar.  Since BeanCounterLogicSolution is defect free, any
+test failures in BeanCounterLogicTest while testing BeanCounterLogicSolution
+indicate a bug in BeanCounterLogicTest.
 
 1. BeanCounterLogicTest on BeanCounterLogicBuggy
 
     The purpose of this phase is to test BeanCounterLogicTest against the buggy
 BeanCounterLogicBuggy implementation to see if it can find the defects inside
-it.  The class BeanCounterLogicBuggy is given to you in the form of the
-BeanCounterBuggy.jar file.  Since BeanCounterLogicBuggy is buggy, you expect
-most of the tests to fail this time.  If BeanCounterLogicTestSolution fails a
-test but BeanCounterLogicTest passes a test, then this indicates a problem (and
-vice versa).  Read the feedback to get a hint on what the problem is.  You can
-try invoking the main method inside BeanCounterLogicBuggy to see that something
-is not quite right:
+it.  BeanCounterLogicBuggy is the class used in the implementation of
+BeanCounterBuggy.jar.  Since BeanCounterLogicBuggy is buggy, you expect most of
+the tests to fail this time.  BeanCounterLogicTestSolution is the solution
+implementation of BeanCounterLogicTest and most tests indeed fail for
+BeanCounterLogicTestSolution.  If BeanCounterLogicTestSolution fails a test but
+BeanCounterLogicTest passes a test, then this indicates a problem (and vice
+versa).  Read the feedback to get a hint on what the problem is.  Try invoking
+the exact scenario on the buggy implementation to see the bug for yourself and
+figure out why your test cases are not handling it correctly.
 
     ```
-    java -jar BeanCounterBuggy.jar 20 400 luck
+    java -jar BeanCounterBuggy.jar 2 3 skill debug
     ```
 
-    Note that there are a lot of beans in the first slot for some reason.
-There are other defects lurking inside that your model checker should be able
-to find.  You can try running your model checker against BeanCounterLogicBuggy
-using the following command:
-    ```
-    $ runJPFBuggy.bat BeanCounter.win.jpf
-    ```
-    Or, if you are using Mac or Linux:
-
-    ```
-    $ runJPFBuggy.sh BeanCounter.macos.jpf
-    ```
-
-    You should get an output that looks like this (it may not look exactly the
-same depending on how you implemented your assertions but it should look
-similar):
-```
-JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) - (C) 2005-2014 United States Government. All rights reserved.
-
-
-====================================================== system under test
-TestRunner.main("buggy")
-
-====================================================== search started: 3/28/20 3:24 AM
-TESTING BUGGY IMPLEMENTATION
-
-testAdvanceStepCoordinates(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
-testLowerHalf(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
-testAdvanceStepBeanCount(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
-testAdvanceStepPostCondition(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
-testUpperHalf(BeanCounterLogicTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
-testRepeat(BeanCounterLogicTest): Failure in (slotCount=4, beanCount=3, isLucky=false): expected:<3> but was:<2>
-
-====================================================== results
-no errors detected
-
-====================================================== statistics
-elapsed time:       00:00:07
-states:             new=4155,visited=3529,backtracked=7684,end=467
-search:             maxDepth=65,constraints=0
-choice generators:  thread=3 (signal=0,lock=1,sharedRef=0,threadApi=0,reschedule=2), data=3834
-heap:               new=383264,released=241705,maxLive=2274,gcCycles=7659
-instructions:       15145859
-max memory:         700MB
-loaded code:        classes=339,methods=4699
-
-====================================================== search finished: 3/28/20 3:24 AM
-```    
-
+    If you are observant, you should already see a bug in the above commandline.
+    
 ## Resources
 
 These links are the same ones posted at the end of the slides:

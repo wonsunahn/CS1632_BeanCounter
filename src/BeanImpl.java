@@ -7,7 +7,7 @@ import java.util.Random;
  * normal distribution with average SKILL_AVERAGE and standard deviation
  * SKILL_STDEV. The formula to calculate the skill level is:
  * 
- * <p>SKILL_AVERAGE = (double) SLOT_COUNT * 0.5
+ * <p>SKILL_AVERAGE = (double) (SLOT_COUNT-1) * 0.5
  * SKILL_STDEV = (double) Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5))
  * SKILL_LEVEL = (int) Math.round(rand.nextGaussian() * SKILL_STDEV + SKILL_AVERAGE)
  * 
