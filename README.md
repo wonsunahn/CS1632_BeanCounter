@@ -238,14 +238,21 @@ generator that gives randomness to the movement is injected in the BeanImpl
 constructor for easier testing. (**modify**)
 
 * BeanCounterLogicTest.java - The JUnit test class for the BeanCounterLogicImpl
-  class.  Depending on Config, it either runs in plain JUnit mode or JPF on
-JUnit mode as can be seen in the setUp() method.  In plain JUnit mode, a
-particular machine configuration is chosen for testing (5 slots, 3 beans, luck
-mode).  Also the Random number generator is seeded with 42 to make tests
-reproducible.  In JPF on JUnit mode, you are asked to exhaustively test
-different machine configurations (see [Model Checking Using
-JUnit](#model-checking-using-junit)) and all random numbers will be
-exhaustively tested too. (**modify**)
+  class composed entirely of property-based tests.  Depending on Config, it
+either runs in plain JUnit mode or JPF on JUnit mode as can be seen in the
+setUp() method.  In plain JUnit mode, a particular machine configuration is
+chosen for testing (5 slots, 3 beans, luck mode).  Also the Random number
+generator is seeded with 42 to make tests reproducible.  In JPF on JUnit mode,
+you are asked to exhaustively test different machine configurations (see [Model
+Checking Using JUnit](#model-checking-using-junit)) and all random numbers will
+be exhaustively tested too. (**modify**)
+
+* GradeScopeTest.java - The JUnit test class used by GradeScope to autograde
+  your implementation.  It only runs in plain JUnit mode since it contains
+non-property-based tests.  It contains input-specific tests that are not
+covered in BeanCounterLogicTest.java.  Currently, only the testReset method is
+implemented and you need to fill in the // TODO comments to have a full test
+suite.  (**modify**)
 
 * Config.java - The high level configuration of the program.  Controls
   LogicType (your impl, buggy, or solution) and TestType (plain JUnit or JPF on
