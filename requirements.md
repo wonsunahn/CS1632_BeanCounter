@@ -1,4 +1,11 @@
-FUN-USAGE - For both the text UI and GUI, there shall be two commandline arguments where the first argument (bean count) shall be a number greater or equal to 0 and the second argument is either "luck" or "skill".  Otherwise, the program shall terminate with a usage help message.
+FUN-USAGE - For the GUI, there shall be two commandline arguments where the
+first argument (bean count) shall be a number greater or equal to 0 and the
+second argument is either "luck" or "skill".  For the text UI, there shall be
+at least three commandline arguments where the first argument (slot count) and
+second argument (bean count) shall be a number greater or equal to 0, and the
+third argument is either "luck" or "skill".  For the text UI, there shall also
+be an optional fourth commandline argument "debug".  Otherwise, the program
+shall terminate with a usage help message.  
 
 FUN-TEXTUI - When the text UI is invoked, the output shall be "Slot bean counts:" followed by a row of 10 numbers representing the 10 slots.  The sum of the numbers shall equal to the initial bean count passed into the commandline.
 
