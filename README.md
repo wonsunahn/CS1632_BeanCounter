@@ -712,7 +712,7 @@ situation the failure occurred within JPF.  You may do this by adding more
 information to the failString.  The BeanCounterLogicImpl.toString() method may
 come in handy to get the string representation of the machine.  But to make
 this work, you need to change the "fmt.format("%n");" statement to
-"fmt.format("\\n");" within that method (it's just a glitch inside JPF, nothing
+"fmt.format("\n");" within that method (it's just a glitch inside JPF, nothing
 more nothing less).  
 
 Sometimes there are situations where JUnit emits a failure but the failure did
