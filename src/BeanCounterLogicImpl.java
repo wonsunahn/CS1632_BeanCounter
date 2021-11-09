@@ -183,6 +183,9 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * 
 	 * @return the string representation of the machine
 	 */
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+		    value="VA_FORMAT_STRING_USES_NEWLINE", 
+		    justification="I know we should be using %n instead of \n, but JPF for some reason does not like %n")
 	public String toString() {
 		StringBuilder bld = new StringBuilder();
 		Formatter fmt = new Formatter(bld);
@@ -197,7 +200,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 					fmt.format(format, 0);
 				}
 			}
-			fmt.format("%n");
+			fmt.format("\n");
 		}
 		fmt.close();
 		return bld.toString() + getSlotString();
