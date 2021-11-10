@@ -691,28 +691,56 @@ runs using JPF.
 
 What to do when you see a failure?  Now you want to zero in on the path that
 caused you the failure.  The failString tells you the combination of input
-values that caused the failure, so you can now modify the hard coded values for
-slotCount, beanCount, and isLuck for plain JUnit testing mode in the
-BeanCounterLogicTest setUp() method to match that configuration.  And try
-running JUnit again:
+values that caused the failure.  With this information on hand, here are a few
+things you can do:
 
-```
-$ runJUnit.bat (or bash runJUnit.sh for Mac/Linux)
-```
+1. You can modify the hard coded values for slotCount, beanCount, and isLuck
+   for plain JUnit testing mode in the BeanCounterLogicTest setUp() method to
+match that configuration.  And try running JUnit again:
 
-Now that same failure will likely manifest.  But it is still possible that the
-failure does not occur when you test only with JUnit.  This can happen because
-of random number generation.  JPF exhaustive tests all random numbers but with
-only JUnit, the best we could do is seed the generator (with 42) to make the
-tests reproducible.  A different seed will generate a different sequence of
-random numbers, which can result in a different outcome.  So you may have to
-try changing the seed until you find the seed that triggers the failure.  If
-this doesn't work, you may have to do some digging to find out exactly in which
-situation the failure occurred within JPF.  You may do this by adding more
-information to the failString.  The BeanCounterLogicImpl.toString() method may
-come in handy to get the string representation of the machine.  
+   ```
+   $ runJUnit.bat (or bash runJUnit.sh for Mac/Linux)
+   ```
 
-Sometimes there are situations where JUnit emits a failure but the failure did
+   Now that same failure will likely manifest.  
+
+2. But it is still possible that the failure does not occur when you test only
+   with JUnit.  This can happen because of random number generation, and the
+random behavior of beans.  JPF exhaustive tests all random numbers but with
+only JUnit, it only tests one sequence of random numbers starting from the seed
+of 42 that the random number generator was seeded with (for reproducibility).
+If the failure does not occur, you can try different seeds to generate
+different sequences of random numbers, until you find the seed that triggers
+the failure.  
+
+3. There is a possibility that you are not able to find the correct seed.
+   Maybe the particular seed that generates the sequence of random numbers
+triggering the defect does not even exist!  Then, reproducing the defect using
+plain JUnit testing is fundamentally an impossible task.  So then you will have
+to somehow use JPF to track down the defect.  For this, you may want to add
+more information to the failString, beyond the slotCount, beanCount, and isLuck
+input values.  The BeanCounterLogicImpl.toString() method is able to generate a
+string representation of the state of the machine at the current step (this is
+what gets printed in the text UI debug output).  You may want to add to the
+failString this string representation for the current step, or all previous
+steps.
+
+   FIX: If the BeanCounterLogicImpl.toString() has a line that looks like:
+
+   ```
+   fmt.format("%n");
+   ```
+
+   Please change it to:
+
+   ```
+   fmt.format("\n");
+   ```
+
+   There is a glitch within JPF that prevents it from using %n in the format
+string.
+
+Tip: Sometimes there are situations where JUnit emits a failure but the failure did
 not come from an assertion, meaning the failString is not printed and just the
 "null" message is shown.  This is most likely because JUnit suffered an
 exception while running the tests, either in the test code or the application
