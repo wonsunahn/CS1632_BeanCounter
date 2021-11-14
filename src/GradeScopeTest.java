@@ -25,6 +25,9 @@ public class GradeScopeTest {
 	private final int[] logicSlotCounts = { 1, 10, 20 };
 	private BeanCounterLogic[] logics;
 	private Random rand;
+	
+	ByteArrayOutputStream out;
+	PrintStream stdout;
 
 	private String getFailString(int logicIndex, int beanCount) {
 		return "[Slot Count = " + logicSlotCounts[logicIndex] + "] Test case with " + beanCount
@@ -69,13 +72,24 @@ public class GradeScopeTest {
 		for (int i = 0; i < logics.length; i++) {
 			logics[i] = BeanCounterLogic.createInstance(logicSlotCounts[i]);
 		}
-		rand = new Random(42);		
+		rand = new Random(42);
+		
+		out = new ByteArrayOutputStream();
+		stdout = System.out;
+		try {
+			System.setOut(new PrintStream(out, false, Charset.defaultCharset().toString()));
+		} catch (UnsupportedEncodingException uex) {
+			fail();
+		}
 	}
 
 	@After
 	public void tearDown() {
 		logics = null;
 		rand = null;
+		out = null;
+		
+		System.setOut(stdout);
 	}
 
 	/**
@@ -235,17 +249,7 @@ public class GradeScopeTest {
 	 */
 	@Test
 	public void testMain() {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		PrintStream stdout = System.out;
-		try {
-			System.setOut(new PrintStream(out, false, Charset.defaultCharset().toString()));
-		} catch (UnsupportedEncodingException uex) {
-			fail();
-		}
-		
 		// TODO: Implement using out.toString() to get output stream
-		
-		System.setOut(stdout);
 	}
 
 }
