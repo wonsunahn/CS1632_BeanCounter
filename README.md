@@ -18,13 +18,13 @@
   * [Resources](#resources)
   
 # CS 1632 - Software Quality Assurance
-Fall Semester 2021
+Spring Semester 2022
 
-DUE: December 17 (Friday), 2021 11:59 PM
+DUE: Apr 29 (Friday), 2022 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** https://classroom.github.com/a/NeXmTPPx
+**GitHub Classroom Link:** TBD
 
 ## Overview
 
