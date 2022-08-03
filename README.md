@@ -362,7 +362,15 @@ external objects for unit testing.
    private static LogicType logicType = LogicType.SOLUTION;
    ```
 
-   then do Maven test:
+   This ensures that all objects created by
+BeanCounterLogic.createInstance(int) are objects of the corresponding logic
+type.  Now, there is one place where the class name is hard-coded in your code
+and that is in the call to BeanCounterLogicImpl.main(String[]) in
+PlainJUnitTest.testMain().  So please change the call to either
+BeanCounterLogicSolution.main(String[]), if you want to call testMain() against
+the solution.
+
+   After you make these changes, do Maven test:
 
    ```
    mvn test
@@ -395,7 +403,7 @@ external objects for unit testing.
 pass a defect-free implementation, so that you can be sure you have a correct
 understanding of expected behavior.
 
-   WARNING: Don't forget to revert back to LogicType.IMPL, or you will keep
+   WARNING: Don't forget to revert back the changes, or you will keep
 testing the solution implementation while developing your implementation.
 
 1. To test your test cases against the BeanCounterLogicBuggy implementation:
@@ -412,7 +420,12 @@ testing the solution implementation while developing your implementation.
    private static LogicType logicType = LogicType.BUGGY;
    ```
 
-   then do Maven test:
+Again, just like when testing the solution, BeanCounterLogicImpl.main(String[])
+in PlainJUnitTest.testMain() needs to be changed to
+BeanCounterLogicBuggy.main(String[]), , if you want to call testMain() against
+the buggy implementation.
+
+   After the changes, do Maven test:
 
    ```
    mvn test
@@ -459,7 +472,7 @@ Also, the results are nondeterministic and hence unreproducible, making testing
 unreliable.  We need to run JUnit on top of JPF to find these types of bugs in
 a reliable manner (later in Task 3).
 
-   WARNING: Again, don't forget to revert back to LogicType.IMPL.
+   WARNING: Again, don't forget to revert back you changes.
 
 ### Task 2: Write BeanCounterLogicImpl and BeanImpl implementations
 
