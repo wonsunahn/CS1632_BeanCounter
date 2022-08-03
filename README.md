@@ -350,7 +350,7 @@ external objects for unit testing.
 
 1. To test your test cases against the BeanCounterLogicSolution implementation:
 
-   Firt, modify the following line in Config.java:
+   First, modify the following line in Config.java:
 
    ```
    private static LogicType logicType = LogicType.IMPL;
@@ -469,7 +469,7 @@ BeanCounterLogicBuggy to see that something is not quite right:
 notice that if you add up all the beans they sum up to only 363 and not 400!
 As you can see, it is going to be very hard to find these kind of bugs with
 just plain JUnit testing unless you know exactly what you are looking for and
-what commandline arguments to pass.  Also, the results are nondeterministic and
+what commandline arguments to pass.  Also, the results are non-deterministic and
 hence unreproducible, making testing unreliable.  We need to run JUnit on top
 of JPF to find these types of bugs in a reliable manner (later in Task 3).
 
@@ -488,9 +488,9 @@ GUI or the Text UI as you see fit.  Your goal in coding should be to make those
 tests pass (TDD).
 
 The parts in code that you will likely have to fill in is marked with // TODO
-comments.  Please add private member variabless and helper methods as needed.
+comments.  Please add private member variables and helper methods as needed.
 Inside BeanCounterLogicImpl, you will need data structures to represent 1)
-beans that are waiting to fall down in the top reservior, 2) beans that are
+beans that are waiting to fall down in the top reservoir, 2) beans that are
 in-flight bouncing on pegs, and 3) beans that have fallen into slots at the
 bottom.
 
