@@ -20,6 +20,11 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
+		    value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", 
+		    justification = "SpotBugs apparently does not know about @Before methods so "
+			+ "it keeps complaining about the logics field not getting initialized in constructor")
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PlainJUnitTest {
 

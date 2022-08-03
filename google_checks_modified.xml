@@ -38,12 +38,14 @@
 	</module>
 	-->
 
+	<!-- Let's not check line length.  Too much of an annoyance. - Wonsun
 	<module name="LineLength">
 		<property name="fileExtensions" value="java" />
 		<property name="max" value="120" />
 		<property name="ignorePattern"
 			value="^package.*|^import.*|a href|href|http://|https://|ftp://" />
 	</module>
+	-->
 
 	<module name="TreeWalker">
 		<property name="tabWidth" value="2" />
@@ -240,7 +242,7 @@
 		</module>
 		<module name="AbbreviationAsWordInName">
 			<property name="ignoreFinal" value="false" />
-			<property name="allowedAbbreviationLength" value="3" />
+			<property name="allowedAbbreviationLength" value="4" />
 			<property name="tokens"
 				value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF" />
