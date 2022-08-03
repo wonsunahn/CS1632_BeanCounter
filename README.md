@@ -26,7 +26,7 @@ DUE: August 9 (Tuesday), 2022 11:30 AM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** TBD
+**GitHub Classroom Link:** https://classroom.github.com/a/5U519nYb
 
 ## Overview
 
@@ -894,7 +894,7 @@ feedback you get on each submission to improve your code!
 
 The GradeScope autograder works in 5 phases:
 
-1. BeanCounterLogicImpl.java functionality testing  
+1. BeanCounterLogicImpl.java functionality testing (16 points) 
 
     The purpose of this phase is to test BeanCounterLogicImpl for defects.  I
 do this by running the JUnit class
@@ -902,34 +902,54 @@ do this by running the JUnit class
 On a failure, read the feedback to get a hint on which situation led to the
 defect.
 
-1. CheckStyle
+1. CheckStyle (10 points)
 
     This phase runs the CheckStyle tool on your source code.  Each warning will
 get you a point deduction.
 
-1. SpotBugs
+1. SpotBugs (10 points)
 
     This phase runs the SpotBugs tool on your class files.  Each warning will
 get you a point deduction.
 
-1. JPFJUnitTest on BeanCounterLogicSolution
+1. PlainJUnitTest on BeanCounterLogicSolution (9 points)
 
-   All your property-based tests should pass on the solution implementation.
+   All your plain JUnit tests should pass on the solution implementation.
 
-1. JPFJUnitTest on BeanCounterLogicBuggy
+1. PlainJUnitTest on BeanCounterLogicBuggy (14 points)
 
-   Most of your property-based tests should fail on the buggy implementation.
-If a test that should fail passes (or vice-versa), you will get deductions.
+   Most of your plain JUnit tests should fail on the buggy implementation,
+except testReset.  Your test results are compared against those of a reference
+PlainJUnitTestSolution test, and if the former is different from the latter,
+you get a deduction (the former passes and the latter fails, and vice-versa).
 Read the feedback to get a hint on what the problem is.  Try invoking the exact
 scenario on the buggy implementation to see the bug for yourself and figure out
 why your test cases are not handling it correctly.
 
+   For example, if the configuration that failed was 10 slots, 200 beans, in skill
+mode, you may try the following:
+
    ```
-   java -jar BeanCounterBuggy.jar 2 3 skill debug
+   java -cp BeanCounterBuggy.jar edu.pitt.cs.BeanCounterLogicBuggy 10 200 skill debug
    ```
 
-   If you are observant, you should already see a bug in the above commandline.
-    
+   Or you can try the GUI interface (which is limited to 10 slots):
+
+
+   ```
+   java -cp BeanCounterBuggy.jar edu.pitt.cs.BeanCounterLogicBuggy 200 skill
+   ```
+
+1. JPFJUnitTest on BeanCounterLogicSolution (7 points)
+
+   All your property-based tests should pass on the solution implementation.
+
+1. JPFJUnitTest on BeanCounterLogicBuggy (14 points)
+
+   Most of your property-based tests should fail on the buggy implementation as
+well.  Again your tests results are compared against a reference
+JPFJUnitTestSolution class.  Any deviations are deducted.
+
 # Resources
 
 These links are the same ones posted at the end of the slides:
