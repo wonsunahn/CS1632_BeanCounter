@@ -420,10 +420,10 @@ testing the solution implementation while developing your implementation.
    private static LogicType logicType = LogicType.BUGGY;
    ```
 
-Again, just like when testing the solution, BeanCounterLogicImpl.main(String[])
-in PlainJUnitTest.testMain() needs to be changed to
-BeanCounterLogicBuggy.main(String[]), , if you want to call testMain() against
-the buggy implementation.
+   Again, just like when testing the solution,
+BeanCounterLogicImpl.main(String[]) in PlainJUnitTest.testMain() needs to be
+changed to BeanCounterLogicBuggy.main(String[]), , if you want to call
+testMain() against the buggy implementation.
 
    After the changes, do Maven test:
 
@@ -462,15 +462,16 @@ BeanCounterLogicBuggy to see that something is not quite right:
 
    ```
    Slot bean counts:
-     0  11  28  78  86  99  63  27   8   0
+     0   7  22  69  92 100  49  21   3   0
    ```
    
-   Note that now things look pretty normal.  As you can see, it is going to be
-very hard to find these kind of bugs with just plain JUnit testing unless you
-know exactly what you are looking for and what commandline arguments to pass.
-Also, the results are nondeterministic and hence unreproducible, making testing
-unreliable.  We need to run JUnit on top of JPF to find these types of bugs in
-a reliable manner (later in Task 3).
+   Note that now things look pretty normal, but if you look closely, you will
+notice that if you add up all the beans they sum up to only 363 and not 400!
+As you can see, it is going to be very hard to find these kind of bugs with
+just plain JUnit testing unless you know exactly what you are looking for and
+what commandline arguments to pass.  Also, the results are nondeterministic and
+hence unreproducible, making testing unreliable.  We need to run JUnit on top
+of JPF to find these types of bugs in a reliable manner (later in Task 3).
 
    WARNING: Again, don't forget to revert back you changes.
 
