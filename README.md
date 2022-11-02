@@ -20,13 +20,13 @@
 
 # CS 1632 - Software Quality Assurance
 
-Summer Semester 2022
+Fall Semester 2022
 
-DUE: August 9 (Tuesday), 2022 11:30 AM
+DUE: December 16 (Friday), 2022 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** https://classroom.github.com/a/5U519nYb
+**GitHub Classroom Link:** TBD
 
 ## Overview
 
@@ -516,6 +516,9 @@ the formula you should use:
 SKILL_AVERAGE = (double) (SLOT_COUNT - 1) * 0.5
 SKILL_STDEV = (double) Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5))
 SKILL_LEVEL = (int) Math.round(rand.nextGaussian() * SKILL_STDEV + SKILL_AVERAGE)
+
+SKILL_LEVEL = SKILL_LEVEL > (SLOT_COUNT - 1) ? (SLOT_COUNT - 1) : SKILL_LEVEL;
+SKILL_LEVEL = SKILL_LEVEL < 0 ? 0 : SKILL_LEVEL;
 ```
 
 SKILL\_AVERAGE and SKILL\_DEV are the average and standard deviation of the
@@ -523,6 +526,7 @@ skill level that would get you the normal distribution that approximates the
 binomial distribution created by "luck" mode.  If you are curious about how
 those values were computed, refer to this [Wikipedia section on binomial
 distribution approximation](https://en.wikipedia.org/wiki/Binomial_distribution#Normal_approximation).
+The last two lines make sure that SKILL_LEVEL is within the bounds of \[0, SLOT_COUNT - 1\].
 
 ### Task 3: Generate Paths for Different Machine Configurations in JPFJUnitTest.java
 

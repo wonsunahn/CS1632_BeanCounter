@@ -112,7 +112,9 @@ public class JPFJUnitTest {
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
 	 * Invariants: After each advanceStep(),
-	 *             all positions of in-flight beans are legal positions in the logical coordinate system.
+	 *             getInFlightBeanXPos(ypos) for all rows in machine returns a legal xpos.
+	 *             (For example, getInFlightBeanXPos(0) can either return 0 or BeanCounterLogic.NO_BEAN_IN_YPOS,
+	 *              and getInFlightBeanXPos(1) can return 0, 1, or BeanCounterLogic.NO_BEAN_IN_YPOS.  And so on.)
 	 * </pre>
 	 */
 	@Test
@@ -164,15 +166,13 @@ public class JPFJUnitTest {
 	 *                beans has been initialized with an array of Bean objects.
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 *                  Calculate expected bean counts for each slot after having called logic.lowerHalf(),
+	 *                  from current slot bean counts, and store into an expectedSlotCounts array.
 	 *                  Call logic.lowerHalf().
-	 * Invariants: After the machine terminates,
-	 *             remaining bean count is 0
+	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Invariants: remaining bean count is 0
 	 *             in-flight bean count is 0
-	 *             in-slot bean count is beanCount.
-	 *             After calling logic.lowerHalf(),
-	 *             slots in the machine contain only the lower half of the original beans.
-	 *             Remember, if there were an odd number of beans, (N+1)/2 beans should remain.
-	 *             Check each slot for the expected number of beans after having called logic.lowerHalf().
+	 *             expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
 	@Test
@@ -188,15 +188,13 @@ public class JPFJUnitTest {
 	 *                beans has been initialized with an array of Bean objects.
 	 * Execution steps: Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 *                  Calculate expected bean counts for each slot after having called logic.upperHalf(),
+	 *                  from current slot bean counts, and store into an expectedSlotCounts array.
 	 *                  Call logic.upperHalf().
-	 * Invariants: After the machine terminates,
-	 *             remaining bean count is 0
+	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Invariants: remaining bean count is 0
 	 *             in-flight bean count is 0
-	 *             in-slot bean count is beanCount.
-	 *             After calling logic.upperHalf(),
-	 *             slots in the machine contain only the upper half of the original beans.
-	 *             Remember, if there were an odd number of beans, (N+1)/2 beans should remain.
-	 *             Check each slot for the expected number of beans after having called logic.upperHalf().
+	 *             expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
 	@Test
@@ -213,9 +211,11 @@ public class JPFJUnitTest {
 	 * Execution steps: If beans are created in skill mode (if isLuck is false),
 	 *                  Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 *                  Construct an expectedSlotCounts array that stores current bean counts for each slot.
 	 *                  Call logic.repeat();
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 * Invariants: Bean count in each slot is identical after the first run and second run of the machine.
+	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Invariants: expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
 	@Test

@@ -3,7 +3,7 @@ package edu.pitt.cs;
 import java.util.Random;
 
 /**
- * Code by @author Wonsun Ahn.  Copyright Summer 2022.
+ * Code by @author Wonsun Ahn.  Copyright Fall 2022.
  * 
  * <p>
  * Bean: If created in skill mode, each bean is assigned a skill level from 0-9
@@ -14,6 +14,8 @@ import java.util.Random;
  * SKILL_AVERAGE = (double) (SLOT_COUNT-1) * 0.5
  * SKILL_STDEV = (double) Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5))
  * SKILL_LEVEL = (int) Math.round(rand.nextGaussian() * SKILL_STDEV + SKILL_AVERAGE)
+ * SKILL_LEVEL = SKILL_LEVEL > (SLOT_COUNT - 1) ? (SLOT_COUNT - 1) : SKILL_LEVEL;
+ * SKILL_LEVEL = SKILL_LEVEL < 0 ? 0 : SKILL_LEVEL;
  * </pre>
  * 
  * <p>
