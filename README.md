@@ -26,7 +26,7 @@ DUE: April 28 (Friday), 2023 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** TBD
+**GitHub Classroom Link:** https://classroom.github.com/a/wMD6ISPD
 
 ## Overview
 
@@ -824,12 +824,16 @@ defects that we missed before in plain JUnit testing:
    ====================================================== search started: 3/20/23 1:13 AM
    TESTING BUGGY IMPLEMENTATION WITH JPF USING JUNIT FRAMEWORK
 
-   testAdvanceStepCoordinates(JPFJUnitTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
-   testLowerHalf(JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
-   testAdvanceStepBeanCount(JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
-   testAdvanceStepPostCondition(JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
-   testUpperHalf(JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
-   testRepeat(JPFJUnitTest): Failure in (slotCount=4, beanCount=3, isLucky=false): expected:<3> but was:<2>
+   testLowerHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=1, beanCount=2, isLucky=false): expected:<1> but was:<2>
+   testUpperHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=1, beanCount=2, isLucky=false): expected:<1> but was:<2>
+   testLowerHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=1, beanCount=2, isLucky=true): expected:<1> but was:<2>
+   testUpperHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=1, beanCount=2, isLucky=true): expected:<1> but was:<2>
+   testAdvanceStepCoordinates(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
+   testLowerHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
+   testAdvanceStepBeanCount(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
+   testAdvanceStepPostCondition(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<3> but was:<2>
+   testUpperHalf(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=2, beanCount=3, isLucky=false): expected:<2> but was:<1>
+   testRepeat(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=4, beanCount=3, isLucky=false): expected:<1> but was:<0>
 
    ====================================================== results
    no errors detected
