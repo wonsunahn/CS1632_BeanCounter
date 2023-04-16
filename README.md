@@ -20,9 +20,9 @@
 
 # CS 1632 - Software Quality Assurance
 
-Fall Semester 2022
+Spring Semester 2023
 
-DUE: December 16 (Friday), 2022 11:59 PM
+DUE: April 28 (Friday), 2023 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
@@ -612,7 +612,7 @@ JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) -
 ====================================================== system under test
 edu.pitt.cs.TestRunner.main("impl","junit")
 
-====================================================== search started: 7/27/22 2:00 PM
+====================================================== search started: 3/20/23 2:00 PM
 TESTING YOUR IMPLEMENTATION WITH JPF USING JUNIT FRAMEWORK
 
 Failure in (slotCount=0, beanCount=0, isLucky=false):
@@ -633,7 +633,7 @@ JavaPathfinder core system v8.0 (rev 471fa3b7c6a9df330160844e6c2e4ebb4bf06b6c) -
 ====================================================== system under test
 edu.pitt.cs.TestRunner.main("impl","junit")
 
-====================================================== search started: 7/27/22 10:14 PM
+====================================================== search started: 3/20/23 10:14 PM
 TESTING YOUR IMPLEMENTATION WITH JPF USING JUNIT FRAMEWORK
 
 Failure in (slotCount=1, beanCount=0, isLucky=false):
@@ -703,7 +703,7 @@ get the following failures:
    ====================================================== system under test
    edu.pitt.cs.TestRunner.main("impl","junit")
 
-   ====================================================== search started: 7/27/22 11:33 PM
+   ====================================================== search started: 3/20/23 11:33 PM
    TESTING YOUR IMPLEMENTATION WITH JPF USING JUNIT FRAMEWORK
 
    testReset(edu.pitt.cs.JPFJUnitTest): Failure in (slotCount=1, beanCount=1, isLucky=false):. Check on in-flight bean count expected:<1> but was:<0>
@@ -743,7 +743,7 @@ get the following failures:
    ====================================================== system under test
    edu.pitt.cs.TestRunner.main("impl","trace")
 
-   ====================================================== search started: 7/28/22 1:03 AM
+   ====================================================== search started: 3/20/23 1:03 AM
    TESTING YOUR IMPLEMENTATION WITH JPF USING JUNIT EMULATION FOR TRACING
 
 
@@ -821,7 +821,7 @@ defects that we missed before in plain JUnit testing:
    ====================================================== system under test
    edu.pitt.cs.TestRunner.main("buggy","junit")
 
-   ====================================================== search started: 7/28/22 1:13 AM
+   ====================================================== search started: 3/20/23 1:13 AM
    TESTING BUGGY IMPLEMENTATION WITH JPF USING JUNIT FRAMEWORK
 
    testAdvanceStepCoordinates(JPFJUnitTest): Failure in (slotCount=2, beanCount=1, isLucky=true):
@@ -844,7 +844,7 @@ defects that we missed before in plain JUnit testing:
    max memory:         700MB
    loaded code:        classes=343,methods=4714
 
-   ====================================================== search finished: 7/28/22 1:13 AM
+   ====================================================== search finished: 3/20/23 1:13 AM
    ```    
 
 Now go ahead and implement all the other property-based tests and see if you

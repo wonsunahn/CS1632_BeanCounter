@@ -28,7 +28,7 @@ public interface BeanCounterLogic {
 
 	// Methods
 	public int getSlotCount();
-
+	
 	public int getRemainingBeanCount();
 
 	public int getInFlightBeanXPos(int yPos);
