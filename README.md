@@ -22,11 +22,11 @@
 
 Summer Semester 2023
 
-DUE: August 8 (Tuesday), 2023 11:30 AM
+DUE: August 9 (Wednesday), 2023 10:00 AM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** TBD
+**GitHub Classroom Link:** https://classroom.github.com/a/n7xUVJvJ
 
 ## Overview
 
