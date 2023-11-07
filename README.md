@@ -20,13 +20,13 @@
 
 # CS 1632 - Software Quality Assurance
 
-Summer Semester 2023
+Fall Semester 2023
 
-DUE: August 9 (Wednesday), 2023 10:00 AM
+DUE: December 15 (Friday), 2023 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
-**GitHub Classroom Link:** https://classroom.github.com/a/n7xUVJvJ
+**GitHub Classroom Link:** TBD
 
 ## Overview
 
