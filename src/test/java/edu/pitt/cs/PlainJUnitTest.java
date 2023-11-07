@@ -190,7 +190,7 @@ public class PlainJUnitTest {
 	 *                  Call createBeans to create lucky beans for the slot count and bean count
 	 *                  Call logic.reset(beans).
 	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 *                  Calculate expected bean counts for each slot after having called logic.lowerHalf(),
+	 *                  Calculate expected bean counts for each slot to what they should be after calling logic.lowerHalf(),
 	 *                  from current slot bean counts, and store into an expectedSlotCounts array.
 	 *                  (The total count should be N/2 or (N+1)/2 depending on whether N is even or odd,
 	 *                  where N is the original bean count.)
