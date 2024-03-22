@@ -43,7 +43,7 @@ public class BeanCounterGUI {
 		}
 		
 		// Create the main frame for the app
-		new MainFrame(beanCount, luck);
+		new MainFrame(InstanceType.IMPL, beanCount, luck);
 	}
 
 }

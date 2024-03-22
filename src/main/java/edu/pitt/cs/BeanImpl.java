@@ -40,6 +40,7 @@ public class BeanImpl implements Bean {
 	// TODO: Add more member variables as needed
 	private int xpos;
 	private int ypos;
+	private int slotCount;
 
 	/**
 	 * Constructor - creates a bean in either luck mode or skill mode.
@@ -85,14 +86,16 @@ public class BeanImpl implements Bean {
 	/**
 	 * Update the X and Y coordinates of the bean when the bean is advanced one step
 	 * in the machine.
-	 * The Y-coordinate is incremented by 1. The X-coordinate gets updated depending
+	 * The Y coordinate is incremented by 1. The X coordinate gets updated depending
 	 * on whether the bean chooses to bounce left or right from the current peg.
 	 * The choice ie made randomly if the bean is in luck mode depending on the
 	 * return value of rand.nextInt(2): if it is 0, the bean goes left, if it is 1,
 	 * the bean goes right. If the bean is a skilled bean, the choice is made
 	 * deterministically according to the algorithm on the class description.
+	 * If the resulting X or Y coordinates are greater than or equal to slotCount
+	 * throw BeanOutOfBoundsException.
 	 */
-	public void advanceStep() {
+	public void advanceStep() throws BeanOutOfBoundsException {
 		// TODO: Implement
 	}
 }

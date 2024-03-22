@@ -147,7 +147,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * @return whether there has been any status change. If there is no change, that
 	 *         means the machine is finished.
 	 */
-	public boolean advanceStep() {
+	public boolean advanceStep() throws BeanOutOfBoundsException {
 		// TODO: Implement
 		return false;
 	}
@@ -284,7 +284,12 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 
 		// Perform the experiment
 		while (true) {
-			if (!logic.advanceStep()) {
+			try {
+				if (!logic.advanceStep()) {
+					break;
+				}
+			} catch (BeanOutOfBoundsException ex) {
+				System.out.println("Bean went out of bounds unexpectedly.  Shutting down.");
 				break;
 			}
 			if (debug) {

@@ -46,15 +46,15 @@ public class MainPanel extends JPanel {
 	 * @param beanCount number of beans in the machine
 	 * @param isLuck    whether beans progress through pure luck (or skill)
 	 */
-	public MainPanel(int beanCount, boolean isLuck) {
+	public MainPanel(InstanceType type, int beanCount, boolean isLuck) {
 		super();
 		
 		// Create the internal logic
-		logic = BeanCounterLogic.createInstance(SLOT_COUNT);
+		logic = BeanCounterLogic.createInstance(type, SLOT_COUNT);
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(SLOT_COUNT, isLuck, new Random());
+			beans[i] = Bean.createInstance(type, SLOT_COUNT, isLuck, new Random());
 		}
 		// Initialize the logic with the beans
 		logic.reset(beans);
@@ -143,7 +143,11 @@ public class MainPanel extends JPanel {
 		// Drop the last bean into the slot
 		beanPositions[SLOT_COUNT - 1] = null;
 		// Advance one step
-		logic.advanceStep();
+		try {
+			logic.advanceStep();
+		} catch (BeanOutOfBoundsException ex) {
+			System.err.println("Error: bean has gone out of bounds.");
+		}
 		// Get new positions
 		targetPositions = getBeanPositions();
 		// Repaint

@@ -50,11 +50,11 @@ public class JPFJUnitTest {
 		}
 
 		// Create the internal logic
-		logic = BeanCounterLogic.createInstance(slotCount);
+		logic = BeanCounterLogic.createInstance(InstanceType.IMPL, slotCount);
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(slotCount, isLuck, new Random(42));
+			beans[i] = Bean.createInstance(InstanceType.IMPL, slotCount, isLuck, new Random(42));
 		}
 
 		// A failstring useful to pass to assertions to get a more descriptive error.

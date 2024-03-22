@@ -8,8 +8,8 @@ public interface BeanCounterLogic {
 	 * @param slotCount the number of slots in the machine
 	 * @return BeanCounterLogic object
 	 */
-	public static BeanCounterLogic createInstance(int slotCount) {
-		switch (Config.getLogicType()) {
+	public static BeanCounterLogic createInstance(InstanceType type, int slotCount) {
+		switch (type) {
 			case IMPL:
 				return new BeanCounterLogicImpl(slotCount);
 			case BUGGY:
@@ -28,7 +28,7 @@ public interface BeanCounterLogic {
 
 	// Methods
 	public int getSlotCount();
-	
+
 	public int getRemainingBeanCount();
 
 	public int getInFlightBeanXPos(int yPos);
@@ -45,5 +45,5 @@ public interface BeanCounterLogic {
 
 	public void repeat();
 
-	public boolean advanceStep();
+	public boolean advanceStep() throws BeanOutOfBoundsException;
 }

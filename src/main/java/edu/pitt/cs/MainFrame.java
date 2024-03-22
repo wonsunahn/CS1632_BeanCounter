@@ -21,7 +21,7 @@ public class MainFrame {
 	 * @param beanCount number of beans in the machine
 	 * @param luck      whether beans progress through pure luck (or skill)
 	 */
-	public MainFrame(int beanCount, boolean luck) {
+	public MainFrame(InstanceType type, int beanCount, boolean luck) {
 
 		frame.setSize(MainFrame.WIDTH, MainFrame.HEIGHT);
 		// Close program when window is closed
@@ -29,7 +29,7 @@ public class MainFrame {
 
 		// Add Main Panel and Button Panel
 
-		mainPanel = new MainPanel(beanCount, luck);
+		mainPanel = new MainPanel(type, beanCount, luck);
 
 		buttonPanel = new ButtonPanel(mainPanel);
 

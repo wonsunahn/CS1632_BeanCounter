@@ -11,15 +11,14 @@ public interface Bean {
 	 * @param rand      the random number generator
 	 * @return Bean object
 	 */
-	public static Bean createInstance(int slotCount, boolean isLuck, Random rand) {
-		switch (Config.getLogicType()) {
+	public static Bean createInstance(InstanceType type, int slotCount, boolean isLuck, Random rand) {
+		switch (type) {
 			case IMPL:
 				return new BeanImpl(slotCount, isLuck, rand);
 			case BUGGY:
 				return new BeanBuggy(slotCount, isLuck, rand);
 			case SOLUTION:
 				return new BeanSolution(slotCount, isLuck, rand);
-			default:
 		}
 		return null;
 	}
@@ -32,5 +31,5 @@ public interface Bean {
 
 	public void reset();
 
-	public void advanceStep();
+	public void advanceStep() throws BeanOutOfBoundsException;
 }
