@@ -20,9 +20,9 @@
 
 # CS 1632 - Software Quality Assurance
 
-Fall Semester 2023
+Spring Semester 2024
 
-DUE: December 15 (Friday), 2023 11:59 PM
+DUE: April 26 (Friday), 2024 11:59 PM
 
 Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
 
@@ -236,36 +236,32 @@ on whether the bean is a skilled bean or a lucky bean.  The Random number
 generator that gives randomness to the movement is injected in the BeanImpl
 constructor for easier testing. (**modify**)
 
-* JPFJUnitTest.java - The JUnit test class for the BeanCounterLogicImpl
-  class composed entirely of property-based tests.  Depending on Config, it
-either runs in plain JUnit mode or JPF on JUnit mode as can be seen in the
-setUp() method.  In plain JUnit mode, a particular machine configuration is
-chosen for testing (5 slots, 3 beans, luck mode).  Also the Random number
-generator is seeded with 42 to make tests reproducible.  In JPF on JUnit mode,
-you are asked to exhaustively test different machine configurations (see [Model
-Checking Using JUnit](#model-checking-using-junit)) and all random numbers will
-be exhaustively tested too. (**modify**)
+* JPFJUnitTest.java - An integration test for the BeanCounterLogicImpl class
+  run on top of JPF.  You are asked to exhaustively test different machine
+configurations (see [Model Checking Using JUnit](#model-checking-using-junit))
+and all random outcomes of each machine. (**modify**)
 
-* PlainJUnitTest.java - The JUnit test class used by GradeScope to autograde
-  your implementation.  It only runs in plain JUnit mode since it contains
-non-property-based tests.  It contains input-specific tests that are not
-covered in JPFJUnitTest.java.  Currently, only the testReset method is
-implemented and you need to fill in the // TODO comments to have a full test
-suite.  (**modify**)
+* BeanCounterLogicTest.java - An integration test for the BeanCounterLogicImpl
+  class run on the JUnit framework.  An integration test was chosen over a unit
+test because, in order to do unit testing, you would have to mock the beans and
+the beans are impossible to mock as their states need to change during machine
+operation.  In order to do deterministic testing, either a seeded Random number
+generator is used (for lucky beans) or a mock Random object is used (for
+skilled beans). (**modify**)
 
-* Config.java - The high level configuration of the program.  Controls
-  LogicType (your impl, buggy, or solution) and TestType (plain JUnit or JPF on
-JUnit).
+* BeanTest.java - A unit test for the Bean class.  To keep the test
+  deterministic, a mock Random object is used to control the randomness.
+(**modify).
 
 * BeanCounterLogic.java - The public interface of BeanCounterLogic.  The
   createInstance method creates an instance of BeanCounterLogicImpl (your
 code), BeanCounterLogicBuggy (a buggy implementation), or
-BeanCounterLogicSolution (the solution implementation) based on Config.  Do not
-modify.
+BeanCounterLogicSolution (the solution implementation) depending on
+InstanceType.  Do not modify.
 
 * Bean.java - The public interface of Bean.  The createInstance method creates
   an instance of BeanImpl (your code), BeanBuggy (a buggy implementation), or
-BeanSolution (the solution implementation) based on Config.
+BeanSolution (the solution implementation) depending on InstanceType.
 
 * BeanCounterGUI.java - Contains the main method for the GUI interface of the
   program.  Creates a MainFrame.
@@ -284,17 +280,16 @@ coordinates of Beans are translated to physical coordinates.
 
 * BeanCounterBuggy.jar - A buggy implementation of bean counter.
 
-* runJPF\*.bat / runJPF\*.sh - Scripts to run JUnit tests on bean machine with JPF enabled.
-
-* BeanCounter.win.jpf, BeanCounter.macos.jpf - JPF configuration files for Windows or Mac/Linux
-
-You are asked to fill in and modify 3 files: BeanCounterLogicImpl.java,
-BeanImpl.java, JPFJUnitTest.java.  The first two files complete the
-bean counter implementation.  The last file tests the implementation using the
-Java Path Finder model checker via the JUnit framework.  Take care that you
-limit your modifications to these three files as all the other files will be
-ignored in your submission.  Also, take care that you do not change the public
-interfaces of BeanCounterLogic and Bean as GradeScope relies on them.
+* jpf-core/runTest.bat and jpf-core/runTest.sh - Scripts to run JPFJUnitTest on
+  top of JPF.  / You are asked to fill in and modify 5 files:
+BeanCounterLogicImpl.java, BeanImpl.java, BeanCounterLogicTest.java,
+BeanTest.java, and JPFJUnitTest.java.  The first two files complete the bean
+counter implementation.  The third and fourth files are JUnit tests for the two
+implementation files.  The last file tests the implementation using the Java
+Path Finder model checker.  Take care that you limit your modifications to
+these three files as all the other files will be ignored in your submission.
+Also, take care that you do not change the public interfaces of
+BeanCounterLogic and Bean as GradeScope relies on them.
 
 I expect you to employ test-driven development (TDD) for this project and fully
 embrace it.  I can guarantee you that it will shorten development time.  You
@@ -304,44 +299,34 @@ you should perform them.
 
 ### Task 1: Write Plain JUnit Tests
 
-Start by completing the tests in [PlainJUnitTest.java](src/test/java/edu/pitt/cs/PlainJUnitTest.java)
-by replacing the // TODO comments.  One test testReset() is already implemented
-for you.  These are the tests that GradeScope is going to run to verify your
-implementation.
+Start by completing the tests in
+[BeanTest.java](src/test/java/edu/pitt/cs/BeanTest.java) and
+[BeanCounterLogicTest.java](src/test/java/edu/pitt/cs/BeanCounterLogicTest.java)
+by replacing the // TODO comments.  These are the tests that GradeScope is
+going to run to verify your implementation.
 
-Note that we are not mocking the Bean objects, even though the Bean class is an
-external class from the perspective of the BeanCounterLogicImpl class that we
-are testing.  This is intentional.  In this case, I made a conscious decision
-that I wanted to integration test the entire application, instead of mocking
-external objects for unit testing.
+Note that we are not mocking the Bean objects inside BeanCounterLogicTest, even
+though the Bean class is an external class from the perspective of the
+BeanCounterLogicImpl class that we are testing.  This is unavoidable as there
+is no way to mock Beans that change state constantly as they stream down the
+machine.  Remember that Mockito.when only allows stubbing of fixed state as a
+precondition.
 
-1. To test your BeanCounterLogicImpl implementation simply do Maven test:
+To remove nondeterminism from the program which would make it impossible to
+test reliably, we either mock or seed the Random object.  Please fill in the //
+TODO comments in the setUp() method to do one or the other as instructed in the
+comment.
+
+1. To test BeanTest and BeanCounterLogicTest, simply do Maven test:
 
    ```
    mvn test
    ```
-
-   This will invoke the two JUnit classes in the source tree: PlainJUnitTest.java
-   and JPFJUnitTest.java.  When run as part of Maven test, JPFJUnitTest runs
-   in plain JUnit mode and tests a machine with slotCount = 5 and beanCount = 3
-   in luck mode.  The tests for JPFJUnitTest is yet to be implemented so they will
-   all pass.  PlainJUnitTest has the testReset method implemented, and it should
-   fail since BeanCounterLogicImpl currently does not properly reset:
-
-   ```
-   ...
-   -------------------------------------------------------
-   T E S T S
-   -------------------------------------------------------
-   Running edu.pitt.cs.JPFJUnitTest
-   Failure in (slotCount=5, beanCount=3, isLucky=true):
-   Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.092 sec
-   Running edu.pitt.cs.PlainJUnitTest
-   Tests run: 8, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.006 sec <<< FAILURE!
-   testReset(edu.pitt.cs.PlainJUnitTest)  Time elapsed: 0.001 sec  <<< FAILURE!
-   java.lang.AssertionError: [Slot Count = 1] Test case with 2 initial beans failed. Check on remaining bean count expected:<1> but was:<0>
-   ...
-   ```
+   
+   Note that this is not going to run JPFJUnitTest even though it is under the
+test folder as it is excluded from Maven testing in the maven-surefire-plugin
+configuration inside pom.xml.  JPFJUnitTest is going to be tested separately on
+top of JPF.
 
 1. To test your test cases against the BeanCounterLogicSolution implementation:
 
