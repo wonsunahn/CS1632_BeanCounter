@@ -1,13 +1,13 @@
 package edu.pitt.cs;
 
-import java.util.Random;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import gov.nasa.jpf.util.test.TestJPF;
 import gov.nasa.jpf.vm.Verify;
-
-import static org.junit.Assert.*;
+import java.util.Random;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Code by @author Wonsun Ahn
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  * the possible random path taken by the beans during operation.
  */
 
-public class JPFJUnitTest {
+public class JPFJUnitTest extends TestJPF {
 	private static BeanCounterLogic logic; // The core logic of the program
 	private static Bean[] beans; // The beans in the machine
 	private static String failString; // A descriptive fail string for assertions
@@ -29,25 +29,47 @@ public class JPFJUnitTest {
 	private static boolean isLuck; // Whether the machine we want to test is in "luck" or "skill" mode
 
 	/**
+	 * Returns the number of in-flight beans that are streaming down the machine.
+	 * 
+	 * @return number of beans in-flight in the machine
+	 */
+	private int getInFlightBeanCount() {
+		int inFlight = 0;
+		for (int yPos = 0; yPos < slotCount; yPos++) {
+			int xPos = logic.getInFlightBeanXPos(yPos);
+			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) {
+				inFlight++;
+			}
+		}
+		return inFlight;
+	}
+
+	/**
+	 * Returns the number of beans that are collected in the slots at the bottom.
+	 * 
+	 * @return number of beans in slots in the machine
+	 */
+	private int getInSlotsBeanCount() {
+		int inSlots = 0;
+		for (int i = 0; i < slotCount; i++) {
+			inSlots += logic.getSlotBeanCount(i);
+		}
+		return inSlots;
+	}
+
+	/**
 	 * Sets up the test fixture.
 	 */
-	@BeforeClass
-	public static void setUp() {
-		if (Config.getTestType() == TestType.JUNIT) {
-			slotCount = 5;
-			beanCount = 3;
-			isLuck = true;
-		} else if (Config.getTestType() == TestType.JPF_ON_JUNIT) {
-			/*
-			 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
-			 * beanCount, and isLuck: slotCount should take values 1-5, beanCount should
-			 * take values 0-3, and isLucky should be either true or false. For reference on
-			 * how to use the Verify API, look at:
-			 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
-			 */
-		} else {
-			assert (false);
-		}
+	@Before
+	public void setUp() {
+		/*
+		 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
+		 * beanCount, and isLuck: slotCount should take values 1-5, beanCount should
+		 * take values 0-3, and isLucky should be either true or false. For reference on
+		 * how to use the Verify API, look at:
+		 * https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
+		 */
+
 
 		// Create the internal logic
 		logic = BeanCounterLogic.createInstance(InstanceType.IMPL, slotCount);
@@ -58,12 +80,8 @@ public class JPFJUnitTest {
 		}
 
 		// A failstring useful to pass to assertions to get a more descriptive error.
-		failString = "Failure in (slotCount=" + slotCount
-				+ ", beanCount=" + beanCount + ", isLucky=" + isLuck + "):";
-	}
-
-	@AfterClass
-	public static void tearDown() {
+		failString = "Failure in (slotCount=" + slotCount + ", beanCount=" + beanCount
+				+ ", isLucky=" + isLuck + "):";
 	}
 
 	/**
@@ -85,7 +103,19 @@ public class JPFJUnitTest {
 	 */
 	@Test
 	public void testReset() {
-		// TODO: Implement
+		/*
+		 * When host JVM encounters the verifyNoPropertyViolation(), it invokes the JPF
+		 * VM on this test method. So there are effectively two virtual machines
+		 * executing this method. The verifyNoPropertyViolation() method returns false
+		 * if the executing VM is the host JVM and returns true if it is the JPF VM.
+		 */
+		if (verifyNoPropertyViolation() == false) {
+			// This is the host JVM so return immediately.
+			return;
+		}
+		// This is the JPF VM, so run the test case on top of it, starting from the setUp().
+		setUp();
+
 		/*
 		 * Currently, it just prints out the failString to demonstrate to you all the
 		 * cases considered by Java Path Finder. If you called the Verify API correctly
@@ -101,6 +131,8 @@ public class JPFJUnitTest {
 		 * PLEASE REMOVE when you are done implementing.
 		 */
 		System.out.println(failString);
+		
+		// TODO: Implement
 	}
 
 	/**
@@ -118,7 +150,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testAdvanceStepCoordinates() {
+	public void testAdvanceStepCoordinates() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
+		}
+		setUp();
+
 		// TODO: Implement
 	}
 
@@ -135,7 +172,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testAdvanceStepBeanCount() {
+	public void testAdvanceStepBeanCount() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
+		}
+		setUp();
+
 		// TODO: Implement
 	}
 
@@ -154,7 +196,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testAdvanceStepPostCondition() {
+	public void testAdvanceStepPostCondition() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
+		}
+		setUp();
+
 		// TODO: Implement
 	}
 
@@ -176,7 +223,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testLowerHalf() {
+	public void testLowerHalf() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
+		}
+		setUp();
+
 		// TODO: Implement
 	}
 
@@ -198,7 +250,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testUpperHalf() {
+	public void testUpperHalf() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
+		}
+		setUp();
+
 		// TODO: Implement
 	}
 
@@ -219,9 +276,12 @@ public class JPFJUnitTest {
 	 * </pre>
 	 */
 	@Test
-	public void testRepeat() {
-		if (!isLuck) {
-			// TODO: Implement
+	public void testRepeat() throws BeanOutOfBoundsException {
+		if (verifyNoPropertyViolation() == false) {
+			return;
 		}
+		setUp();
+
+		// TODO: Implement
 	}
 }
