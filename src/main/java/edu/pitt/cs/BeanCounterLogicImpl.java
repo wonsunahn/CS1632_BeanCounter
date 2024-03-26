@@ -156,7 +156,7 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	 * Number of spaces in between numbers when printing out the state of the machine.
 	 * Make sure the number is odd (even numbers don't work as well).
 	 */
-	private int xspacing = 3;
+	private final int xspacing = 3;
 
 	/**
 	 * Calculates the number of spaces to indent for the given row of pegs.
