@@ -20,6 +20,14 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 
+/**
+ * Code by @author Wonsun Ahn. Copyright Spring 2024.
+ * 
+ * <p>
+ * Does integration testing on BeanCounterLogic. Makes tests deterministic by
+ * seeding the random number generator for lucky beans and mocking it for
+ * skilled beans.
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanCounterLogicTest {
 

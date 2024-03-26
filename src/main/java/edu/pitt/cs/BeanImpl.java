@@ -3,7 +3,7 @@ package edu.pitt.cs;
 import java.util.Random;
 
 /**
- * Code by @author Wonsun Ahn.  Copyright Fall 2022.
+ * Code by @author Wonsun Ahn.  Copyright Spring 2024.
  * 
  * <p>
  * Bean: If created in skill mode, each bean is assigned a skill level from 0-9
