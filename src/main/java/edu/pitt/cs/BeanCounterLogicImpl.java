@@ -36,7 +36,10 @@ import java.util.Random;
  */
 
 public class BeanCounterLogicImpl implements BeanCounterLogic {
-	// TODO: Add member methods and variables as needed
+	// TODO: Add member methods and variables as needed.
+	// You will need data structures to represent 1) beans that are waiting to fall
+	// down in the top reservoir, 2) beans that are in-flight bouncing on pegs, and
+	// 3) beans that have fallen into slots at the bottom.
 
 	/**
 	 * Constructor - creates the bean counter logic object that implements the core

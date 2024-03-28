@@ -19,6 +19,9 @@ import java.util.Random;
  * </pre>
  * 
  * <p>
+ * Reference: https://en.wikipedia.org/wiki/Binomial_distribution#Normal_approximation
+ * 
+ * <p>
  * A skill level of 9 means it always makes the "right" choices (pun intended)
  * when the machine is operating in skill mode ("skill" passed on command line).
  * That means the bean will always go right when a peg is encountered, resulting
