@@ -60,7 +60,6 @@ public class JPFJUnitTest extends TestJPF {
 	/**
 	 * Sets up the test fixture.
 	 */
-	@Before
 	public void setUp() {
 		/*
 		 * TODO: Use the Java Path Finder Verify API to generate choices for slotCount,
