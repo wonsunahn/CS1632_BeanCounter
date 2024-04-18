@@ -19,8 +19,9 @@ public interface Bean {
 				return new BeanBuggy(slotCount, isLuck, rand);
 			case SOLUTION:
 				return new BeanSolution(slotCount, isLuck, rand);
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	// Public interface of BeanCounterLogic
