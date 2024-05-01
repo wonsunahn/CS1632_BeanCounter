@@ -37,6 +37,8 @@ public interface BeanCounterLogic {
 
 	public double getAverageSlotBeanCount();
 
+	public String getSlotString();
+	
 	public void upperHalf();
 
 	public void lowerHalf();
