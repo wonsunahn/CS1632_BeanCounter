@@ -20,11 +20,11 @@
 
 # CS 1632 - Software Quality Assurance
 
-Spring Semester 2024
+Summer Semester 2024
 
-DUE: April 26 (Friday), 2024 11:59 PM
+DUE: August 7 (Wednesday), 2024 8:30 AM
 
-Due to the grading deadline, there is no late submission.  Please work with your partner to complete the project.
+Due to the grading deadline, there is no late submission.
 
 **GitHub Classroom Link:** TBD
 
@@ -381,8 +381,8 @@ method to do one or the other as instructed in the comment.
 Again, please use InstanceType.SOLUTION and InstanceType.BUGGY in
 BeanCounterLogic.createInstance and Bean.createInstance to verify your testing
 against the solution and buggy versions.  Also, inside testMain(), instead of
-calling BeanCounterLogicImpl(String[]), please call
-BeanCounterLogicSolution(String[]) or BeanCounterLogicBuggy(String[]), to test
+calling BeanCounterLogicImpl.main(String[]), please call
+BeanCounterLogicSolution.main(String[]) or BeanCounterLogicBuggy.main(String[]), to test
 the respective versions.  If you test against the buggy version, all tests
 should fail with the exception of testReset().
 
@@ -613,7 +613,14 @@ how closely the GUI follows the requirements as demonstrated in BeanCounterSolut
 
 # Grading
 
-TBD.
+* GradeScope autograder - 79%
+* Verify API used properly - 5%
+* Extra test checking new invariant - 5%
+* Visual inspection of GUI application - 11%
+
+Please review the rubric in GradeScope for details.  I reserve the right to
+deduct points for any attempt to try to game GradeScope into giving you more
+points.  Also, plagiarism will get you a zero for the project.
 
 # Submission
 
@@ -628,7 +635,57 @@ until you don't get deductions.
 
 # GradeScope Feedback
 
-TBD.  GradeScoe autograder is still under construction.  Will be released soon!
+It is encouraged that you submit to GradeScope early and often.  Please use the
+feedback you get on each submission to improve your code!
+
+The GradeScope autograder works in 6 phases:
+
+1. BeanTest Grading (13 points)
+
+   This phase runs your BeanTest against BeanSolution (the solution
+implementation of Bean) and BeanBuggy (a buggy implementation of Bean).  All
+your tests are expected to pass for BeanSolution and all your tests are
+expected to fail for BeanBuggy, with the exception of testConstructor and
+testReset.
+
+1. BeanCounterLogicTest Grading (14 points)
+
+   This phase runs your BeanCounterLogicTest against BeanCounterLogicSolution
+and BeanCounterLogicBuggy.  Again, all your tests are expected to pass on the
+solution and all your tests are expected to fail on the buggy version except
+for testReset.
+
+1. JPFJUnitTest Grading (21 points)
+
+   This phase runs your JPFJUnitTest against BeanCounterLogicSolution and
+BeanCounterLogicBuggy.  Again, all your tests are expected to pass on the
+solution and all your tests are expected to fail on the buggy version except
+for testReset.  The latter part of this section is composed of output from the
+JavaPathFinder, to give you a hint on what the problem might be.  There are
+three outputs respectively delimited by the header "[[[ JPFJUnitTest on
+BeanCounterLogicSolution output ]]]", "[[[ JPFJUnitTest on
+BeanCounterLogicBuggy output ]]]", and "[[[ JPFJUnitTestSolution on
+BeanCounterLogicBuggy output ]]]".
+
+1. CheckStyle (5 points)
+
+   This phase runs the CheckStyle tool on your source code.  Each warning will
+get you a 0.5 point deduction.
+
+1. SpotBugs (5 points)
+
+   This phase runs the SpotBugs tool on your class files.  Each warning will
+get you a 0.5 point deduction.
+
+1. BeanCounterLogic Grading (21 points)
+
+   This phase runs the solution versions of BeanCounterLogicTest and
+JPFJUnitTest on your BeanCounterLogicImpl implementation.  Both JUnit testing
+and JPF model checking is used to thoroughly verify your code.
+
+Please read the GradeScope feedback to get a hint on what the problem is.  For
+each of the problems, you should be able to reproduce it by creating SOLUTION
+or BUGGY objects using createInstance as explained in previous sections.
 
 # Resources
 
