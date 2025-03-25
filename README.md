@@ -20,13 +20,13 @@
 
 # CS 1632 - Software Quality Assurance
 
-Fall Semester 2024
+Spring Semester 2025
 
-DUE: December 13 (Friday), 2024 11:59 PM
+DUE: April 30 (Wednesday), 2025 11:59 PM
 
 Due to the grading deadline, there is no late submission.
 
-**GitHub Classroom Link:** https://classroom.github.com/a/yihESvZP
+**GitHub Classroom Link:** TBD
 
 ## Overview
 
@@ -502,7 +502,7 @@ JavaPathfinder core system v8.0 (rev 1a704e1d6c3d92178504f8cdfe57b068b4e22d9c) -
 ====================================================== system under test
 edu.pitt.cs.JPFJUnitTest.runTestMethod()
 
-====================================================== search started: 3/28/24, 6:26 AM
+====================================================== search started: 3/24/25, 6:26 AM
 [WARNING] orphan NativePeer method: jdk.internal.misc.Unsafe.getUnsafe()Lsun/misc/Unsafe;
 Failure in (slotCount=1, beanCount=0, isLucky=false):
 Failure in (slotCount=1, beanCount=0, isLucky=true):
@@ -548,7 +548,7 @@ Failure in (slotCount=5, beanCount=3, isLucky=true):
 ====================================================== results
 no errors detected
 
-====================================================== search finished: 3/28/24, 6:26 AM
+====================================================== search finished: 3/24/25, 6:26 AM
 ......................................... testReset: Ok
 
 (snipped for brevity)
@@ -692,8 +692,7 @@ http://javapathfinder.sourceforge.net/
 https://github.com/javapathfinder/jpf-core/wiki/Verify-API-of-JPF
 
 * CheckStyle reference:  
-https://checkstyle.sourceforge.io/checks.html  
-If you don't understand a CheckStyle warning, read the corresponding entry inside google\_checks\_modified.xml under the checkstyle-jars folder and the above reference.
+https://checkstyle.org/checks.html
 
 * SpotBugs reference:  
 https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html
