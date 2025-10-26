@@ -10,6 +10,13 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 
+/**
+ * Code by @author Wonsun Ahn. Copyright Fall 2025.
+ * 
+ * <p>
+ * Does unit testing on Bean. Makes tests deterministic by mocking Random
+ * and having it return a fixed value.
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanTest {
 

@@ -17,7 +17,7 @@ import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 
 /**
- * Code by @author Wonsun Ahn. Copyright Summer 2024.
+ * Code by @author Wonsun Ahn. Copyright Fall 2025.
  * 
  * <p>
  * Does integration testing on BeanCounterLogic. Makes tests deterministic by

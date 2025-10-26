@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Code by @author Wonsun Ahn
+ * Code by @author Wonsun Ahn. Copyright Fall 2025.
  * 
  * <p>
  * Uses the Java Path Finder model checking tool to check BeanCounterLogic in
@@ -18,7 +18,6 @@ import org.junit.Test;
  * "skill" modes for various numbers of slots and beans. It also goes down all
  * the possible random path taken by the beans during operation.
  */
-
 public class JPFJUnitTest extends TestJPF {
 	private static BeanCounterLogic logic; // The core logic of the program
 	private static Bean[] beans; // The beans in the machine
