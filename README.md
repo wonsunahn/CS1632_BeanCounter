@@ -20,9 +20,9 @@
 
 # CS 1632 - Software Quality Assurance
 
-Fall Semester 2025
+Spring Semester 2026
 
-DUE: August 12 (Friday), 2025 11:59 M
+DUE: May 1 (Friday), 2026 11:59 PM
 
 Due to the grading deadline, there is no late submission.
 
