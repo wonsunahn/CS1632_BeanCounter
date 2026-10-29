@@ -1,49 +1,60 @@
 package edu.pitt.cs;
 
-public class BeanCounterGUI {
+/**
+ * The GUI of the bean counter.  Checks the commandline arguments and creates
+ * the main frame of the app.
+ */
+public final class BeanCounterGUI {
+	private BeanCounterGUI() {
+	}
 
-	public static void showUsage() {
-		System.out.println("Usage: java BeanCounterGUI <number of beans> <luck | skill>");
-		System.out.println("Example: java BeanCounterGUI 400 luck");
+	private static void showUsage() {
+		System.out.println("Usage: java BeanCounterGUI <slot count> <number of beans> <luck | skill> [debug]");
+		System.out.println("Example: java BeanCounterGUI 10 400 luck");
 	}
 
 	/**
 	 * Main method. Creates the main frame for the app.
 	 * 
-	 * @param args args[0] is an integer bean count, args[1] is a string which is
-	 *             either luck or skill.
+	 * @param args args[0] is the slot count, args[1] is the bean count, and
+	 *             args[2] is either luck or skill, with an optional debug flag.
 	 */
-
 	public static void main(String[] args) {
-		if (args.length != 2) {
+		if (args.length != 3 && args.length != 4) {
 			showUsage();
 			return;
 		}
 
+		int slotCount;
 		int beanCount;
 		try {
-			beanCount = Integer.parseInt(args[0]);
-		} catch (NumberFormatException ne) {
+			slotCount = Integer.parseInt(args[0]);
+			beanCount = Integer.parseInt(args[1]);
+		} catch (NumberFormatException exception) {
 			showUsage();
 			return;
 		}
-		if (beanCount < 0) {
+		if (slotCount <= 0 || beanCount <= 0) {
 			showUsage();
 			return;
 		}
 
 		boolean luck;
-		if (args[1].equals("luck")) {
+		if (args[2].equals("luck")) {
 			luck = true;
-		} else if (args[1].equals("skill")) {
+		} else if (args[2].equals("skill")) {
 			luck = false;
 		} else {
 			showUsage();
 			return;
 		}
-		
-		// Create the main frame for the app
-		new MainFrame(InstanceType.IMPL, beanCount, luck);
-	}
 
+		boolean debug = args.length == 4;
+		if (debug && !args[3].equals("debug")) {
+			showUsage();
+			return;
+		}
+
+		new MainFrame(InstanceType.IMPL, slotCount, beanCount, luck, debug);
+	}
 }

@@ -17,7 +17,7 @@ public class ButtonPanel extends JPanel {
 	
 	private UpperHalfButton upper;
 	
-	private RepeatButton repeat;
+	private CollectButton collect;
 	
 	private ResetButton clear;
 
@@ -38,7 +38,7 @@ public class ButtonPanel extends JPanel {
 		stop = new StopButton(m);
 		lower = new LowerHalfButton(m);
 		upper = new UpperHalfButton(m);
-		repeat = new RepeatButton(m);
+		collect = new CollectButton(m);
 		clear = new ResetButton(m);
 		setLayout(new FlowLayout());
 
@@ -50,7 +50,7 @@ public class ButtonPanel extends JPanel {
 		add(stop);
 		add(lower);
 		add(upper);
-		add(repeat);
+		add(collect);
 		add(clear);
 	}
 

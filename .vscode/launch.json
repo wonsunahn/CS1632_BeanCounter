@@ -20,19 +20,12 @@
         },
         {
             "type": "java",
-            "name": "Launch BeanCounterLogicImpl",
+            "name": "Launch BeanCounterTextUI",
             "request": "launch",
-            "mainClass": "edu.pitt.cs.BeanCounterLogicImpl",
+            "mainClass": "edu.pitt.cs.BeanCounterTextUI",
             "projectName": "bean-counter",
-            "args": "${command:SpecifyProgramArgs}"
-        },
-        {
-            "type": "java",
-            "name": "Launch TestRunner",
-            "request": "launch",
-            "mainClass": "edu.pitt.cs.TestRunner",
-            "projectName": "bean-counter",
-            "args": "${command:SpecifyProgramArgs}"
+            "args": "${command:SpecifyProgramArgs}",
+            "console": "integratedTerminal"
         }
     ]
 }

@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
-public class RepeatButton extends JButton {
+public class CollectButton extends JButton {
 
 	private MainPanel mainPanel;
 
@@ -15,16 +15,16 @@ public class RepeatButton extends JButton {
 	 * @param m the main animation panel where all the action happens
 	 */
 	@SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "This is not a security vulnerability.")
-	public RepeatButton(MainPanel m) {
-		super("Repeat");
+	public CollectButton(MainPanel m) {
+		super("Collect");
 		mainPanel = m;
-		addActionListener(new RepeatButtonListener());
+		addActionListener(new CollectButtonListener());
 	}
 
-	class RepeatButtonListener implements ActionListener {
+	class CollectButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			mainPanel.repeat();
+			mainPanel.collect();
 		}
 	}
 }

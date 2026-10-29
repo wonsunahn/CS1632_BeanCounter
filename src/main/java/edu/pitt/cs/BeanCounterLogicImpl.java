@@ -1,8 +1,5 @@
 package edu.pitt.cs;
 
-import java.util.Formatter;
-import java.util.Random;
-
 /**
  * Code by @author Wonsun Ahn.  Copyright Fall 2025.
  * 
@@ -24,7 +21,7 @@ import java.util.Random;
  * 
  * <p>
  * Note that BeanCounterLogic uses a logical coordinate system to store the
- * positions of in-flight beans.For example, for a 4-slot machine:
+ * positions of in-flight beans. For example, for a 4-slot machine:
  * 
  * <pre>
  *                      (0, 0)
@@ -136,11 +133,10 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	}
 
 	/**
-	 * Repeats the experiment by scooping up all beans in the slots and all beans
-	 * in-flight and adding them into the pool of remaining beans. As in the
-	 * beginning, the machine starts with one bean at the top.
+	 * Collects all beans in the slots and in flight into the pool of remaining
+	 * beans. As at the beginning, the machine starts with one bean at the top.
 	 */
-	public void repeat() {
+	public void collect() {
 		// TODO: Implement
 	}
 
@@ -155,154 +151,5 @@ public class BeanCounterLogicImpl implements BeanCounterLogic {
 	public boolean advanceStep() throws BeanOutOfBoundsException {
 		// TODO: Implement
 		return false;
-	}
-	
-	/**
-	 * Number of spaces in between numbers when printing out the state of the machine.
-	 * Make sure the number is odd (even numbers don't work as well).
-	 */
-	private final int xspacing = 3;
-
-	/**
-	 * Calculates the number of spaces to indent for the given row of pegs.
-	 * 
-	 * @param yPos the y-position (or row number) of the pegs
-	 * @return the number of spaces to indent
-	 */
-	private int getIndent(int yPos) {
-		int rootIndent = (getSlotCount() - 1) * (xspacing + 1) / 2 + (xspacing + 1);
-		return rootIndent - (xspacing + 1) / 2 * yPos;
-	}
-
-	/**
-	 * Constructs a string representation of the bean count of all the slots.
-	 * 
-	 * @return a string with bean counts for each slot
-	 */
-	public String getSlotString() {
-		StringBuilder bld = new StringBuilder();
-		Formatter fmt = new Formatter(bld);
-		String format = "%" + (xspacing + 1) + "d";
-		for (int i = 0; i < getSlotCount(); i++) {
-			fmt.format(format, getSlotBeanCount(i));
-		}
-		fmt.close();
-		return bld.toString();
-	}
-
-	/**
-	 * Constructs a string representation of the entire machine. If a peg has a bean
-	 * above it, it is represented as a "1", otherwise it is represented as a "0".
-	 * At the very bottom is attached the slots with the bean counts.
-	 * 
-	 * @return the string representation of the machine
-	 */
-	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(
-		    value="VA_FORMAT_STRING_USES_NEWLINE", 
-		    justification="I know we should be using %n instead of \n, but JPF for some reason does not like %n")
-	public String toString() {
-		StringBuilder bld = new StringBuilder();
-		Formatter fmt = new Formatter(bld);
-		for (int yPos = 0; yPos < getSlotCount(); yPos++) {
-			int xBeanPos = getInFlightBeanXPos(yPos);
-			for (int xPos = 0; xPos <= yPos; xPos++) {
-				int spacing = (xPos == 0) ? getIndent(yPos) : (xspacing + 1);
-				String format = "%" + spacing + "d";
-				if (xPos == xBeanPos) {
-					fmt.format(format, 1);
-				} else {
-					fmt.format(format, 0);
-				}
-			}
-			fmt.format("\n");
-		}
-		fmt.close();
-		return bld.toString() + getSlotString();
-	}
-
-	/**
-	 * Prints usage information.
-	 */
-	public static void showUsage() {
-		System.out.println("Usage: java BeanCounterLogic slot_count bean_count <luck | skill> [debug]");
-		System.out.println("Example: java BeanCounterLogic 10 400 luck");
-		System.out.println("Example: java BeanCounterLogic 20 1000 skill debug");
-	}
-	
-	/**
-	 * Auxiliary main method. Runs the machine in text mode with no bells and
-	 * whistles. It simply shows the slot bean count at the end.
-	 * 
-	 * @param args commandline arguments; see showUsage() for detailed information
-	 */
-	public static void main(String[] args) {
-		boolean debug;
-		boolean luck;
-		int slotCount = 0;
-		int beanCount = 0;
-
-		if (args.length != 3 && args.length != 4) {
-			showUsage();
-			return;
-		}
-
-		try {
-			slotCount = Integer.parseInt(args[0]);
-			beanCount = Integer.parseInt(args[1]);
-		} catch (NumberFormatException ne) {
-			showUsage();
-			return;
-		}
-		if (beanCount < 0) {
-			showUsage();
-			return;
-		}
-
-		if (args[2].equals("luck")) {
-			luck = true;
-		} else if (args[2].equals("skill")) {
-			luck = false;
-		} else {
-			showUsage();
-			return;
-		}
-
-		if (args.length == 4 && args[3].equals("debug")) {
-			debug = true;
-		} else {
-			debug = false;
-		}
-
-		// Create the internal logic
-		BeanCounterLogic logic = BeanCounterLogic.createInstance(InstanceType.IMPL, slotCount);;
-		// Create the beans (in luck mode)
-		Bean[] beans = new Bean[beanCount];
-		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(InstanceType.IMPL, slotCount, luck, new Random());
-		}
-		// Initialize the logic with the beans
-		logic.reset(beans);
-
-		if (debug) {
-			System.out.println(logic.toString());
-		}
-
-		// Perform the experiment
-		while (true) {
-			try {
-				if (!logic.advanceStep()) {
-					break;
-				}
-			} catch (BeanOutOfBoundsException ex) {
-				System.out.println("Bean went out of bounds unexpectedly.  Shutting down.");
-				break;
-			}
-			if (debug) {
-				System.out.println(logic.toString());
-			}
-		}
-		// display experimental results
-		System.out.println("Slot bean counts:");
-		System.out.println(logic.getSlotString());
 	}
 }

@@ -37,15 +37,13 @@ public interface BeanCounterLogic {
 
 	public double getAverageSlotBeanCount();
 
-	public String getSlotString();
-	
 	public void upperHalf();
 
 	public void lowerHalf();
 
 	public void reset(Bean[] beans);
 
-	public void repeat();
+	public void collect();
 
 	public boolean advanceStep() throws BeanOutOfBoundsException;
 }

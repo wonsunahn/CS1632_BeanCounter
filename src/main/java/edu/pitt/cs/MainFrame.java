@@ -18,10 +18,12 @@ public class MainFrame {
 	 * Constructor - creates the main panel. Inside it is the main panel and the
 	 * button panel.
 	 * 
+	 * @param slotCount number of slots in the machine
 	 * @param beanCount number of beans in the machine
 	 * @param luck      whether beans progress through pure luck (or skill)
+	 * @param debug     whether to print the machine state after each step
 	 */
-	public MainFrame(InstanceType type, int beanCount, boolean luck) {
+	public MainFrame(InstanceType type, int slotCount, int beanCount, boolean luck, boolean debug) {
 
 		frame.setSize(MainFrame.WIDTH, MainFrame.HEIGHT);
 		// Close program when window is closed
@@ -29,7 +31,7 @@ public class MainFrame {
 
 		// Add Main Panel and Button Panel
 
-		mainPanel = new MainPanel(type, beanCount, luck);
+		mainPanel = new MainPanel(type, slotCount, beanCount, luck, debug);
 
 		buttonPanel = new ButtonPanel(mainPanel);
 

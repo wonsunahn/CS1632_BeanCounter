@@ -1,12 +1,8 @@
 package edu.pitt.cs;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import gov.nasa.jpf.util.test.TestJPF;
 import gov.nasa.jpf.vm.Verify;
 import java.util.Random;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -86,17 +82,17 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for void reset(Bean[] beans).
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
 	 * Execution steps: Call logic.reset(beans).
-	 * Invariants: If beanCount is greater than 0,
-	 *             remaining bean count is beanCount - 1
-	 *             in-flight bean count is 1 (the bean initially at the top)
-	 *             in-slot bean count is 0.
-	 *             If beanCount is 0,
-	 *             remaining bean count is 0
-	 *             in-flight bean count is 0
-	 *             in-slot bean count is 0.
+	 * Invariants:
+	 * - If beanCount is greater than 0, remaining bean count is beanCount - 1.
+	 * - If beanCount is greater than 0, in-flight bean count is 1 (the bean initially at the top).
+	 * - If beanCount is greater than 0, in-slot bean count is 0.
+	 * - If beanCount is 0, remaining bean count is 0.
+	 * - If beanCount is 0, in-flight bean count is 0.
+	 * - If beanCount is 0, in-slot bean count is 0.
 	 * </pre>
 	 */
 	@Test
@@ -137,14 +133,15 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for boolean advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 * Invariants: After each advanceStep(),
-	 *             getInFlightBeanXPos(ypos) for all rows in machine returns a legal xpos.
-	 *             (For example, getInFlightBeanXPos(0) can either return 0 or BeanCounterLogic.NO_BEAN_IN_YPOS,
-	 *              and getInFlightBeanXPos(1) can return 0, 1, or BeanCounterLogic.NO_BEAN_IN_YPOS.  And so on.)
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
+	 * Execution steps:
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * Invariants: After each advanceStep(), getInFlightBeanXPos(ypos) for all rows in the machine returns a
+	 * legal xpos. (For example, getInFlightBeanXPos(0) can either return 0 or BeanCounterLogic.NO_BEAN_IN_YPOS,
+	 * and getInFlightBeanXPos(1) can return 0, 1, or BeanCounterLogic.NO_BEAN_IN_YPOS, and so on.)
 	 * </pre>
 	 */
 	@Test
@@ -161,12 +158,13 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for boolean advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 * Invariants: After each advanceStep(),
-	 *             the sum of remaining, in-flight, and in-slot beans is equal to beanCount.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
+	 * Execution steps:
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * Invariants: After each advanceStep(), the sum of remaining, in-flight, and in-slot beans equals beanCount.
 	 * </pre>
 	 */
 	@Test
@@ -183,14 +181,16 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for boolean advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 * Invariants: After the machine terminates,
-	 *             remaining bean count is 0
-	 *             in-flight bean count is 0
-	 *             in-slot bean count is beanCount.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
+	 * Execution steps:
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * Invariants:
+	 * - After the machine terminates, remaining bean count is 0.
+	 * - After the machine terminates, in-flight bean count is 0.
+	 * - After the machine terminates, in-slot bean count is beanCount.
 	 * </pre>
 	 */
 	@Test
@@ -207,16 +207,17 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for void lowerHalf()().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 * 	                Calculate expected bean counts for each slot after having called logic.lowerHalf(),
-	 *                  from current slot bean counts, and store into an expectedSlotCounts array.
-	 *                  (The total count should be N/2 or (N+1)/2 depending on whether N is even or odd,
-	 *                  where N is the original bean count.)
-	 *                  Call logic.lowerHalf().
-	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
+	 * Execution steps:
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * 3. Calculate expected bean counts for each slot after calling logic.lowerHalf(), using the current slot bean
+	 *    counts, and store them in an expectedSlotCounts array. The total count should be N/2 or (N+1)/2 depending
+	 *    on whether N is even or odd, where N is the original bean count.
+	 * 4. Call logic.lowerHalf().
+	 * 5. Construct an observedSlotCounts array that stores the current bean count for each slot.
 	 * Invariants: expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
@@ -234,16 +235,17 @@ public class JPFJUnitTest extends TestJPF {
 	 * Test case for void upperHalf().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 *                  Calculate expected bean counts for each slot after having called logic.upperHalf(),
-	 *                  from current slot bean counts, and store into an expectedSlotCounts array.
-	 *                  (The total count should be N/2 or (N+1)/2 depending on whether N is even or odd,
-	 *                  where N is the original bean count.)
-	 *                  Call logic.upperHalf().
-	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with an array of Bean objects.
+	 * Execution steps:
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * 3. Calculate expected bean counts for each slot after calling logic.upperHalf(), using the current slot bean
+	 *    counts, and store them in an expectedSlotCounts array. The total count should be N/2 or (N+1)/2 depending
+	 *    on whether N is even or odd, where N is the original bean count.
+	 * 4. Call logic.upperHalf().
+	 * 5. Construct an observedSlotCounts array that stores the current bean count for each slot.
 	 * Invariants: expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
@@ -258,23 +260,25 @@ public class JPFJUnitTest extends TestJPF {
 	}
 
 	/**
-	 * Test case for void repeat().
+	 * Test case for void collect().
 	 * 
 	 * <pre>
-	 * Preconditions: logic has been initialized with an instance of BeanCounterLogic.
-	 *                beans has been initialized with an array of Bean objects.
-	 * Execution steps: If beans are created in skill mode (if isLuck is false),
-	 *                  Call logic.reset(beans).
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 *                  Construct an expectedSlotCounts array that stores current bean counts for each slot.
-	 *                  Call logic.repeat();
-	 *                  Call logic.advanceStep() in a loop until it returns false (the machine terminates).
-	 *                  Construct an observedSlotCounts array that stores current bean counts for each slot.
+	 * Preconditions:
+	 * - logic has been initialized with an instance of BeanCounterLogic.
+	 * - beans has been initialized with skill mode beans.
+	 * Execution steps:
+	 * (Note the preconditions above about skill mode beans.)
+	 * 1. Call logic.reset(beans).
+	 * 2. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * 3. Construct an expectedSlotCounts array that stores the current bean count for each slot.
+	 * 4. Call logic.collect().
+	 * 5. Call logic.advanceStep() in a loop until it returns false (the machine terminates).
+	 * 6. Construct an observedSlotCounts array that stores the current bean count for each slot.
 	 * Invariants: expectedSlotCounts matches observedSlotCounts exactly.
 	 * </pre>
 	 */
 	@Test
-	public void testRepeat() throws BeanOutOfBoundsException {
+	public void testCollect() throws BeanOutOfBoundsException {
 		if (verifyNoPropertyViolation() == false) {
 			return;
 		}

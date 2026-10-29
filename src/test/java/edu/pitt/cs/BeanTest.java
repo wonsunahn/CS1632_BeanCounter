@@ -72,8 +72,9 @@ public class BeanTest {
 	 * 
 	 * <pre>
 	 * Preconditions: beans array populated with beans as described in setUp().
-	 * Execution steps: For each bean in beans, call advanceStep().
-	 *                  For each bean in beans, call reset().
+	 * Execution steps:
+	 * 1. For each bean in beans, call advanceStep().
+	 * 2. For each bean in beans, call reset().
 	 * Postconditions: For each bean in beans, getXPos() == 0 and getYPos() == 0.
 	 * </pre>
 	 */
@@ -86,8 +87,9 @@ public class BeanTest {
 	 * Test advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: beans array populated with beans as described in setUp().
-	 *                beans[0] always goes left by having rand.nextInt(2) return 0.
+	 * Preconditions:
+	 * - beans array populated with beans as described in setUp().
+	 * - beans[0] always goes left because rand.nextInt(2) returns 0.
 	 * Execution steps: For beans[0], call advanceStep().
 	 * Postconditions: For beans[0], getXPos() == 0 and getYPos() == 1.
 	 * </pre>
@@ -101,8 +103,9 @@ public class BeanTest {
 	 * Test advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: beans array populated with beans as described in setUp().
-	 *                beans[0] always goes left by having rand.nextInt(2) return 0.
+	 * Preconditions:
+	 * - beans array populated with beans as described in setUp().
+	 * - beans[0] always goes left because rand.nextInt(2) returns 0.
 	 * Execution steps: For beans[0], call advanceStep() twice.
 	 * Postconditions: For beans[0], getXPos() == 0 and getYPos() == 2.
 	 * </pre>
@@ -116,8 +119,9 @@ public class BeanTest {
 	 * Test advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: beans array populated with beans as described in setUp().
-	 *                beans[0] always goes right by having rand.nextInt(2) return 1.
+	 * Preconditions:
+	 * - beans array populated with beans as described in setUp().
+	 * - beans[0] always goes right because rand.nextInt(2) returns 1.
 	 * Execution steps: For beans[0], call advanceStep().
 	 * Postconditions: For beans[0], getXPos() == 1 and getYPos() == 1.
 	 * </pre>
@@ -131,8 +135,9 @@ public class BeanTest {
 	 * Test advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: beans array populated with beans as described in setUp().
-	 *                beans[0] always goes right by having rand.nextInt(2) return 1.
+	 * Preconditions:
+	 * - beans array populated with beans as described in setUp().
+	 * - beans[0] always goes right because rand.nextInt(2) returns 1.
 	 * Execution steps: For beans[0], call advanceStep() twice.
 	 * Postconditions: For beans[0], getXPos() == 2 and getYPos() == 2.
 	 * </pre>
@@ -146,8 +151,9 @@ public class BeanTest {
 	 * Test advanceStep().
 	 * 
 	 * <pre>
-	 * Preconditions: beans array populated with beans as described in setUp().
-	 *                beans[0] always goes left by having rand.nextInt(2) return 0.
+	 * Preconditions:
+	 * - beans array populated with beans as described in setUp().
+	 * - beans[0] always goes left because rand.nextInt(2) returns 0.
 	 * Execution steps: For beans[0], call advanceStep() 10 times.
 	 * Postconditions: BeanOutOfBoundsException is thrown at 10th call to advanceStep().
 	 * </pre>

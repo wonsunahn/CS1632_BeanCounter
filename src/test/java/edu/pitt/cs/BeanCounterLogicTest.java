@@ -1,14 +1,8 @@
 package edu.pitt.cs;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -26,9 +20,6 @@ import org.mockito.Mockito;
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanCounterLogicTest {
-
-	private ByteArrayOutputStream out = new ByteArrayOutputStream();
-	private PrintStream stdout;
 
 	private final int slotCount = 5;
 	private final int beanCount = 3;
@@ -91,12 +82,16 @@ public class BeanCounterLogicTest {
 	 * Test reset(Bean[]).
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
 	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 * Postconditions: logic.getRemainingBeanCount() returns 2.
-	 *                 getInSlotsBeanCount() returnd 0.
-	 *                 logic.getInFlightBeanXPos(0) returns 0.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 2.
+	 * - getInSlotsBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(0) returns 0.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
 	 * </pre>
 	 */
 	@Test
@@ -108,14 +103,19 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode once.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() once.
-	 * Postconditions: logic.getRemainingBeanCount() returns 1.
-	 *                 getInSlotsBeanCount() returnd 0.
-	 *                 logic.getInFlightBeanXPos(0) returns 0.
-	 *                 logic.getInFlightBeanXPos(1) returns 1.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() once.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 1.
+	 * - getInSlotsBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(0) returns 0.
+	 * - logic.getInFlightBeanXPos(1) returns 1.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
 	 * </pre>
 	 */
 	@Test
@@ -127,15 +127,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode twice.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() twice.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInSlotsBeanCount() returnd 0.
-	 *                 logic.getInFlightBeanXPos(0) returns 0.
-	 *                 logic.getInFlightBeanXPos(1) returns 1.
-	 *                 logic.getInFlightBeanXPos(2) returns 1.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() twice.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInSlotsBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(0) returns 0.
+	 * - logic.getInFlightBeanXPos(1) returns 1.
+	 * - logic.getInFlightBeanXPos(2) returns 1.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
 	 * </pre>
 	 */
 	@Test
@@ -147,15 +152,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode thrice.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() thrice.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInSlotsBeanCount() returnd 0.
-	 *                 logic.getInFlightBeanXPos(1) returns 1.
-	 *                 logic.getInFlightBeanXPos(2) returns 1.
-	 *                 logic.getInFlightBeanXPos(3) returns 2.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() thrice.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInSlotsBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(1) returns 1.
+	 * - logic.getInFlightBeanXPos(2) returns 1.
+	 * - logic.getInFlightBeanXPos(3) returns 2.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
 	 * </pre>
 	 */
 	@Test
@@ -167,15 +177,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode 4 times.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() 4 times.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInSlotsBeanCount() returnd 0.
-	 *                 logic.getInFlightBeanXPos(2) returns 2.
-	 *                 logic.getInFlightBeanXPos(3) returns 2.
-	 *                 logic.getInFlightBeanXPos(4) returns 2.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() 4 times.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInSlotsBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(2) returns 2.
+	 * - logic.getInFlightBeanXPos(3) returns 2.
+	 * - logic.getInFlightBeanXPos(4) returns 2.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
 	 * </pre>
 	 */
 	@Test
@@ -187,15 +202,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode 5 times.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() 5 times.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 logic.getInFlightBeanXPos(3) returns 3.
-	 *                 logic.getInFlightBeanXPos(4) returns 3.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
-	 *                 logic.getSlotBeanCount(2) returns 1.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() 5 times.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(3) returns 3.
+	 * - logic.getInFlightBeanXPos(4) returns 3.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * - logic.getSlotBeanCount(2) returns 1.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -207,15 +227,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode 6 times.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() 6 times.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 logic.getInFlightBeanXPos(4) returns 4.
-	 *                 For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
-	 *                 logic.getSlotBeanCount(2) returns 1.
-	 *                 logic.getSlotBeanCount(3) returns 1.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() 6 times.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - logic.getInFlightBeanXPos(4) returns 4.
+	 * - For all other i, logic.getInFlightBeanXPos(i) returns BeanCounterLogic.NO_BEAN_IN_YPOS.
+	 * - logic.getSlotBeanCount(2) returns 1.
+	 * - logic.getSlotBeanCount(3) returns 1.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -227,15 +252,20 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in luck mode 7 times.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() 7 times.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInFlightBeanCount() returns 0.
-	 *                 logic.getSlotBeanCount(2) returns 1.
-	 *                 logic.getSlotBeanCount(3) returns 1.
-	 *                 logic.getSlotBeanCount(4) returns 1.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() 7 times.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInFlightBeanCount() returns 0.
+	 * - logic.getSlotBeanCount(2) returns 1.
+	 * - logic.getSlotBeanCount(3) returns 1.
+	 * - logic.getSlotBeanCount(4) returns 1.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -247,14 +277,19 @@ public class BeanCounterLogicTest {
 	 * Test calling advanceStep() in skill mode.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour skilled beans into machine by calling logic.reset(skilledBeans).
-	 *                  Call logic.advanceStep() 7 times.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInFlightBeanCount() returns 0.
-	 *                 logic.getSlotBeanCount(1) returns 1.
-	 *                 logic.getSlotBeanCount(4) returns 2.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour skilled beans into the machine by calling logic.reset(skilledBeans).
+	 * 2. Call logic.advanceStep() 7 times.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInFlightBeanCount() returns 0.
+	 * - logic.getSlotBeanCount(1) returns 1.
+	 * - logic.getSlotBeanCount(4) returns 2.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -266,13 +301,18 @@ public class BeanCounterLogicTest {
 	 * Test calling lowerHalf() in skill mode.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour skilled beans into machine by calling logic.reset(skilledBeans).
-	 *                  Call logic.advanceStep() until it returns false.
-	 *                  Call logic.lowerHalf().
-	 * Postconditions: logic.getSlotBeanCount(1) returns 1.
-	 *                 logic.getSlotBeanCount(4) returns 1.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour skilled beans into the machine by calling logic.reset(skilledBeans).
+	 * 2. Call logic.advanceStep() until it returns false.
+	 * 3. Call logic.lowerHalf().
+	 * Postconditions:
+	 * - logic.getSlotBeanCount(1) returns 1.
+	 * - logic.getSlotBeanCount(4) returns 1.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -284,12 +324,17 @@ public class BeanCounterLogicTest {
 	 * Test calling upperHalf() in skill mode.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour skilled beans into machine by calling logic.reset(skilledBeans).
-	 *                  Call logic.advanceStep() until it returns false.
-	 *                  Call logic.upperHalf().
-	 * Postconditions: logic.getSlotBeanCount(4) returns 2.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour skilled beans into the machine by calling logic.reset(skilledBeans).
+	 * 2. Call logic.advanceStep() until it returns false.
+	 * 3. Call logic.upperHalf().
+	 * Postconditions:
+	 * - logic.getSlotBeanCount(4) returns 2.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
@@ -298,23 +343,28 @@ public class BeanCounterLogicTest {
 	}
 
 	/**
-	 * Test calling repeat() in skill mode.
+	 * Test calling collect() in skill mode.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour skilled beans into machine by calling logic.reset(skilledBeans).
-	 *                  Call logic.advanceStep() until it returns false.
-	 *                  Call logic.repeat().
-	 *                  Call logic.advanceStep() until it returns false.
-	 * Postconditions: logic.getRemainingBeanCount() returns 0.
-	 *                 getInFlightBeanCount() returns 0.
-	 *                 logic.getSlotBeanCount(1) returns 1.
-	 *                 logic.getSlotBeanCount(4) returns 2.
-	 *                 For all other i, logic.getSlotBeanCount(i) returns 0.
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour skilled beans into the machine by calling logic.reset(skilledBeans).
+	 * 2. Call logic.advanceStep() until it returns false.
+	 * 3. Call logic.collect().
+	 * 4. Call logic.advanceStep() until it returns false.
+	 * Postconditions:
+	 * - logic.getRemainingBeanCount() returns 0.
+	 * - getInFlightBeanCount() returns 0.
+	 * - logic.getSlotBeanCount(1) returns 1.
+	 * - logic.getSlotBeanCount(4) returns 2.
+	 * - For all other i, logic.getSlotBeanCount(i) returns 0.
 	 * </pre>
 	 */
 	@Test
-	public void testRepeat() throws BeanOutOfBoundsException {
+	public void testCollect() throws BeanOutOfBoundsException {
 		// TODO: Implement
 	}
 
@@ -322,31 +372,19 @@ public class BeanCounterLogicTest {
 	 * Test calling getAverageSlotBeanCount() in luck mode.
 	 * 
 	 * <pre>
-	 * Preconditions: logic, luckyBeans, skilledBeans initialized in setUp() as described.
-	 * Execution steps: Pour lucky beans into machine by calling logic.reset(luckyBeans).
-	 *                  Call logic.advanceStep() until it returns false.
-	 *                  Call logic.getAverageSlotBeanCount().
+	 * Preconditions:
+	 * - logic is initialized in setUp() as described.
+	 * - luckyBeans is initialized in setUp() as described.
+	 * - skilledBeans is initialized in setUp() as described.
+	 * Execution steps:
+	 * 1. Pour lucky beans into the machine by calling logic.reset(luckyBeans).
+	 * 2. Call logic.advanceStep() until it returns false.
+	 * 3. Call logic.getAverageSlotBeanCount().
 	 * Postconditions: return value is 3.0 within a difference delta of 0.001
 	 * </pre>
 	 */
 	@Test
 	public void testGetAverageSlotBeanCount() throws BeanOutOfBoundsException {
-		// TODO: Implement
-	}
-
-	/**
-	 * Test main(String[] args).
-	 * 
-	 * <pre>
-	 * Preconditions: None.
-	 * Execution steps: Call BeanCounterLogicImpl.main("10", "500", "luck").
-	 * Postconditions: There are two lines of output.
-	 *             There are 10 slot counts on the second line of output.
-	 *             The sum of the 10 slot counts is equal to 500.
-	 * </pre>
-	 */
-	@Test
-	public void testMain() {
 		// TODO: Implement
 	}
 
