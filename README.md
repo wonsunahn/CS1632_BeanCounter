@@ -835,7 +835,7 @@ to the stakeholders.
    it.  Building with "sphinx-build -W --keep-going . _build/html" from inside
    docs/ must succeed with no warnings.
 
-1. In requirements.rst, write one req for each of the 34 requirements in
+1. In requirements.rst, write one req for each of the 30 requirements in
    requirements.md, with the requirement's name (for example,
    FUN-MACHINE-LOWER-HALF) in its title.  Under each req, write specs that
    cover every equivalence class of the requirement.  For example,
