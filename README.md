@@ -853,13 +853,6 @@ to the stakeholders.
    must show no orphaned test cases and no uncovered specs for the
    requirements listed in the previous step.
 
-1. Run every test case against both your implementation and
-   BeanCounterSolution.jar, and record the results in EXTRA_CREDIT.md.  If a
-   test case fails on your implementation, fix your code.  If it fails on
-   BeanCounterSolution.jar, write a defect report for it as a GitHub issue in
-   your repository, in the same format as Exercise 1, and list the issue's URL
-   in EXTRA_CREDIT.md.
-
 ## Code Coverage (Exercise 2)
 
 Your required tests already cover most of the logic and Bean classes, but they
@@ -885,10 +878,6 @@ and improve coverage the way you did for RentACat in Exercise 2.
    jacoco_reports/ folder, named luckybeanimpl_jacoco.jpg,
    skilledbeanimpl_jacoco.jpg, beancounterlogicimpl_jacoco.jpg, and
    beancountertextui_jacoco.jpg.
-
-1. In EXTRA_CREDIT.md, list every line that is still not covered in those
-   four classes and explain why it is not covered, and why it either cannot
-   be covered or is not worth covering.
 
 ## Behavior-Driven Development (Exercise 3)
 
@@ -959,8 +948,7 @@ for slot counts 1-5 and bean counts 0-3, because the state space explodes
 beyond that.  Real users run machines with dozens of slots and hundreds of
 beans.  For this extra credit, you use QuickCheck, as in Exercise 9, to check
 invariants on randomly generated machines drawn from a much larger range of
-configurations.  Unlike JPF, QuickCheck runs on the regular JVM, so you can use
-JUnit's org.junit.Assert methods as usual.
+configurations.  
 
 1. Add the junit-quickcheck-core and junit-quickcheck-generators dependencies
    to pom.xml, copying them from Exercise 9's pom.xml.  Create a new test class
@@ -977,12 +965,24 @@ JUnit's org.junit.Assert methods as usual.
 
 1. Derive all of the beans' randomness from the seed parameter, so that every
    failure can be reproduced from the configuration and seed that QuickCheck
-   reports.  For example, create one Random from the seed and use its
-   nextLong() to seed each bean's Random.  Do not seed the beans with
-   consecutive numbers such as seed + i: java.util.Random's first outputs are
-   strongly correlated for consecutive seeds, so every lucky bean would make
-   the same first choice, which is exactly the kind of skewed distribution
-   that Exercise 9 warns about.
+   reports.  One way to do this is to create a single "seeder" Random from the
+   seed, and use it to produce a different seed for each bean's Random:
+
+   ```java
+   // TYPE is the InstanceType constant described below
+   Random seeder = new Random(seed);
+   Bean[] beans = new Bean[beanCount];
+   for (int i = 0; i < beanCount; i++) {
+       beans[i] = Bean.createInstance(TYPE, slotCount, isLuck, new Random(seeder.nextLong()));
+   }
+   ```
+
+   The same seed always produces the same sequence of bean seeds, so the
+   machine behaves identically every time you rerun a failing configuration.
+   Do not seed the beans with consecutive numbers such as seed + i:
+   java.util.Random's first outputs are strongly correlated for consecutive
+   seeds, so every lucky bean would make the same first choice, which is
+   exactly the kind of skewed distribution that Exercise 9 warns about.
 
 1. Write at least four @Property tests with at least 200 trials each.  Each
    must check an invariant that holds for every configuration, with no if
@@ -999,12 +999,6 @@ JUnit's org.junit.Assert methods as usual.
    be switched in one place.  Every property must pass on
    InstanceType.SOLUTION and InstanceType.IMPL, and at least two properties
    must fail on InstanceType.BUGGY.
-
-1. For each property that fails on the buggy implementation, record the
-   shrunk configuration and seed that QuickCheck reports in EXTRA_CREDIT.md.
-   Turn one of them into a regular JUnit regression test in the same class,
-   as in Exercise 9.  Then explain whether JPFJUnitTest's range of
-   configurations would have caught the same bug, and why or why not.
 
 1. Keep the whole class fast enough to run with every "mvn test": under one
    minute in total.
