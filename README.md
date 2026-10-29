@@ -21,6 +21,7 @@
   * [Code Coverage (Exercise 2)](#code-coverage-exercise-2)
   * [Behavior-Driven Development (Exercise 3)](#behavior-driven-development-exercise-3)
   * [CI Pipeline (Exercise 8 Part 1)](#ci-pipeline-exercise-8-part-1)
+  * [Stochastic Testing (Exercise 9)](#stochastic-testing-exercise-9)
 
 # CS 1632 - Software Quality Assurance
 Fall Semester 2026 - Final Project
@@ -790,7 +791,7 @@ apply because BeanCounter is not a web application, and ASAN and TSAN
 (Exercise 5) does not apply either, because BeanCounter has no performance
 problems to find, and neither do Docker containers (Exercise 8 Part 2),
 because BeanCounter is a plain Java project that Maven already builds
-portably.  That leaves the four techniques in the
+portably.  That leaves the five techniques in the
 subsections below.  Each subsection lists what a complete submission
 must include.  The requirements are there so that each 5% takes a comparable
 amount of work regardless of which technique you choose, so a submission that
@@ -950,3 +951,60 @@ project's checks on every push, like the Maven CI workflow in Exercise 8.
 
 1. Enable Dependabot version updates for the Maven dependencies, as in
    Exercise 8.
+
+## Stochastic Testing (Exercise 9)
+
+JPF checks your invariants on every random path the beans can take, but only
+for slot counts 1-5 and bean counts 0-3, because the state space explodes
+beyond that.  Real users run machines with dozens of slots and hundreds of
+beans.  For this extra credit, you use QuickCheck, as in Exercise 9, to check
+invariants on randomly generated machines drawn from a much larger range of
+configurations.  Unlike JPF, QuickCheck runs on the regular JVM, so you can use
+JUnit's org.junit.Assert methods as usual.
+
+1. Add the junit-quickcheck-core and junit-quickcheck-generators dependencies
+   to pom.xml, copying them from Exercise 9's pom.xml.  Create a new test class
+   BeanCounterLogicStochasticTest.java under src/test/java/edu/pitt/cs that
+   runs with @RunWith(JUnitQuickcheck.class).
+
+1. Have each @Property test take the machine configuration as parameters that
+   QuickCheck generates: a slot count, a bean count, a boolean for luck or
+   skill mode, and a long seed for the beans' Random objects.  Use @InRange to
+   choose ranges that go well beyond JPF's (for example, up to 50 slots and
+   1,000 beans), and explain your choices in EXTRA_CREDIT.md.  QuickCheck
+   shrinks each parameter on its own, so a failing configuration will shrink
+   toward fewer slots and fewer beans, as you saw with testAdd in Exercise 9.
+
+1. Derive all of the beans' randomness from the seed parameter, so that every
+   failure can be reproduced from the configuration and seed that QuickCheck
+   reports.  For example, create one Random from the seed and use its
+   nextLong() to seed each bean's Random.  Do not seed the beans with
+   consecutive numbers such as seed + i: java.util.Random's first outputs are
+   strongly correlated for consecutive seeds, so every lucky bean would make
+   the same first choice, which is exactly the kind of skewed distribution
+   that Exercise 9 warns about.
+
+1. Write at least four @Property tests with at least 200 trials each.  Each
+   must check an invariant that holds for every configuration, with no if
+   statements that skip configurations (use @InRange instead, as in
+   Exercise 9).  At least one property must be statistical: for example, that
+   with enough beans, the average slot in luck mode is close to
+   (slot count - 1) / 2, or that luck mode and skill mode produce averages
+   close to each other.  Since a statistical property needs enough beans, use
+   @InRange to guarantee a large bean count (for example, minInt = 500).  In
+   EXTRA_CREDIT.md, justify your tolerance so that a correct implementation
+   fails that property less than once in a million trials.
+
+1. Declare the InstanceType used by your tests as a single constant, so it can
+   be switched in one place.  Every property must pass on
+   InstanceType.SOLUTION and InstanceType.IMPL, and at least two properties
+   must fail on InstanceType.BUGGY.
+
+1. For each property that fails on the buggy implementation, record the
+   shrunk configuration and seed that QuickCheck reports in EXTRA_CREDIT.md.
+   Turn one of them into a regular JUnit regression test in the same class,
+   as in Exercise 9.  Then explain whether JPFJUnitTest's range of
+   configurations would have caught the same bug, and why or why not.
+
+1. Keep the whole class fast enough to run with every "mvn test": under one
+   minute in total.

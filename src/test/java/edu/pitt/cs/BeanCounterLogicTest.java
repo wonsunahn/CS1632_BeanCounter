@@ -69,7 +69,7 @@ public class BeanCounterLogicTest {
 
 		// TODO: Use Bean.createInstance to populate the luckyBeans array with beans in luck mode for slotCount.
 		// For each bean, pass in a NEW rand seeded with the number "42 + i" where i is the bean index.
-		// This is necessary to make each bean act deterministically but also differently from each other.
+		// Seeding makes each bean's path deterministic, so the postconditions below always hold.
 		
 		
 		// TODO: Use Bean.createInstance to populate the skilledBeans array with beans in skilled mode for slotCount.
