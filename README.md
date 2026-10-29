@@ -11,14 +11,14 @@
     + [Task 3: Generate Paths for Different Machine Configurations in JPFJUnitTest.java](#task-3-generate-paths-for-different-machine-configurations-in-jpfjunittestjava)
     + [Task 4: Write Property-based tests in JPFJUnitTest.java](#task-4-write-property-based-tests-in-jpfjunittestjava)
     + [Task 5: Add an Extra Property-based Test to JPFJUnitTest.java](#task-5-add-an-extra-property-based-test-to-jpfjunittestjava)
-    + [Task 6: Linting and Auditing](#task-6-linting-and-auditing)
-    + [Task 7: Manual System Testing](#task-7-manual-system-testing)
+    + [Task 6: Measure and Improve Code Coverage](#task-6-measure-and-improve-code-coverage)
+    + [Task 7: Linting and Auditing](#task-7-linting-and-auditing)
+    + [Task 8: Manual System Testing](#task-8-manual-system-testing)
 - [Submission](#submission)
 - [Resources](#resources)
 - [Extra Credit](#extra-credit)
   * [General Rules](#general-rules)
   * [Requirements Specification and Test Plan (Exercise 1)](#requirements-specification-and-test-plan-exercise-1)
-  * [Code Coverage (Exercise 2)](#code-coverage-exercise-2)
   * [Behavior-Driven Development (Exercise 3)](#behavior-driven-development-exercise-3)
   * [CI Pipeline (Exercise 8 Part 1)](#ci-pipeline-exercise-8-part-1)
   * [Stochastic Testing (Exercise 9)](#stochastic-testing-exercise-9)
@@ -43,13 +43,13 @@ use to manually test and debug your program.
 
 This project brings together many of the techniques you have learned this
 semester: test-driven development (TDD), unit and integration testing with
-mocking and seeding to control randomness, linting and pattern-based bug
-finding with CheckStyle and SpotBugs, model checking with Java PathFinder
-(JPF), and manual system testing.  The GradeScope autograder will do extensive
-testing to test various features of the software.  If any of the tests fail,
-that means you have not thoroughly tested your software.  You can also earn up
-to 10% [extra credit](#extra-credit) by applying techniques from earlier
-exercises that this project does not already require.
+mocking and seeding to control randomness, code coverage, linting and
+pattern-based bug finding with CheckStyle and SpotBugs, model checking with
+Java PathFinder (JPF), and manual system testing.  The GradeScope autograder
+will do extensive testing to test various features of the software.  If any of
+the tests fail, that means you have not thoroughly tested your software.  You
+can also earn up to 10% [extra credit](#extra-credit) by applying techniques
+from earlier exercises that this project does not already require.
 
 Since JPF requires Java 11, please make sure you have Java 11 running on your
 machine, just like for Exercise 7.  If you need a refresher on how to set it
@@ -368,7 +368,7 @@ coordinates of Beans are translated to physical coordinates.
 * InstanceType.java - The enumeration of IMPL, SOLUTION, and BUGGY, which you
   pass to the createInstance methods to choose an implementation.
 
-* requirements.md - The requirements for the program, which Task 7 and the
+* requirements.md - The requirements for the program, which Task 8 and the
   extra credit refer to.
 
 * BeanCounterSolution.jar - The solution implementation of bean counter.
@@ -379,10 +379,11 @@ coordinates of Beans are translated to physical coordinates.
   top of JPF.  
 
 Take care that you limit your modifications to the files that are marked
-**modify**, as all the other files will be ignored in your submission (the
-only exception is [extra credit](#extra-credit) work, which is graded by
-hand).  Also, take care that you do not change the public interfaces of
-BeanCounterLogic and Bean as GradeScope relies on them.
+**modify**, as all the other files will be ignored in your submission (the only
+exceptions are the test classes you add in Task 6 and [extra
+credit](#extra-credit) work, which are graded by hand).  Also, take care that
+you do not change the public interfaces of BeanCounterLogic and Bean as
+GradeScope relies on them.
 
 I expect you to employ test-driven development (TDD) for this project and fully
 embrace it.  I can guarantee you that it will shorten development time.  You
@@ -542,8 +543,9 @@ Slot bean counts:
 Now, the beans add up to 10.  Where did the bug go?  As you can see, it is
 going to be very hard to find these kinds of bugs with just plain JUnit testing
 unless you know exactly what you are looking for and even then you need a
-certain amount of luck.  To find these kinds of bugs reliably we need Java
-PathFinder (JPF).
+certain amount of luck.  Model checking with Java PathFinder (JPF) can find
+bugs like this one, as long as the configurations we check are large enough to
+trigger them.
 
 ### Task 3: Generate Paths for Different Machine Configurations in JPFJUnitTest.java
 
@@ -727,7 +729,40 @@ to a specific input combination using if statements, it doesn't count.  Make
 sure that the test case is well documented with a Javadoc comment just like
 other methods.
 
-### Task 6: Linting and Auditing
+### Task 6: Measure and Improve Code Coverage
+
+Code coverage measures how much of your code your tests actually execute.  As
+in Exercise 2, we will use JaCoCo, which is already configured in pom.xml.
+Every "mvn test" generates a coverage report that you can open at:
+
+```
+target/site/jacoco/index.html
+```
+
+If any of your JUnit tests fail, Maven stops before JaCoCo generates the
+report.  To generate it anyway, run:
+
+```
+mvn jacoco:report
+```
+
+Note that JaCoCo only measures the tests that Maven runs, so JPFJUnitTest,
+which you run on top of JPF, does not count toward coverage.
+
+Reach at least 90% instruction coverage for each of LuckyBeanImpl.java,
+SkilledBeanImpl.java, BeanCounterLogicImpl.java, and BeanCounterTextUI.java.
+Until you reach it, "mvn test" prints a message for each of these classes that
+is below 90%, but the build does not fail, so you can keep running "mvn test"
+and "mvn site" while you work.  Which tests to add is up to you.  Put any tests
+you add in new test classes, not in BeanTest.java, BeanCounterLogicTest.java,
+BeanCounterTextUITest.java, or JPFJUnitTest.java.  The autograder expects every
+test in those four files to fail on the buggy implementation (with the
+exceptions noted in Tasks 1, 2, and 4), which most coverage tests will not.  As
+with the other tests, document each new test with Preconditions, Execution
+steps, and Postconditions in its Javadoc comment, and assert on its
+postconditions.
+
+### Task 7: Linting and Auditing
 
 Run the CheckStyle linter and the SpotBugs tool regularly while and after
 coding.  Use the Maven site generation phase to generate the reports:
@@ -740,7 +775,7 @@ Then open target/site/index.html and look under Project Reports.  Note that
 pom.xml configures both tools to check your test classes as well as your
 application classes, so warnings in your tests count too.
 
-### Task 7: Manual System Testing
+### Task 8: Manual System Testing
 
 Even after doing model checking, you still need to verify that the program
 "looks" right end-to-end in the GUI.  This is hard to do using automated
@@ -784,18 +819,18 @@ the maximum project score is 110%, and points above 100% carry over to your
 course grade.
 
 The project already requires TDD, unit and integration testing with JUnit and
-Mockito, linting and bug finding with CheckStyle and SpotBugs, and model
-checking with JPF, so those do not count.  Playwright (Exercise 4) does not
-apply because BeanCounter is not a web application, and ASAN and TSAN
-(Exercise 6) apply only to C and C++ programs.  Performance testing
-(Exercise 5) does not apply either, because BeanCounter has no performance
-problems to find, and neither do Docker containers (Exercise 8 Part 2),
-because BeanCounter is a plain Java project that Maven already builds
-portably.  That leaves the five techniques in the
-subsections below.  Each subsection lists what a complete submission
-must include.  The requirements are there so that each 5% takes a comparable
-amount of work regardless of which technique you choose, so a submission that
-misses some of them will receive partial credit.
+Mockito, code coverage with JaCoCo, linting and bug finding with CheckStyle and
+SpotBugs, and model checking with JPF, so those do not count.  Playwright
+(Exercise 4) does not apply because BeanCounter is not a web application, and
+ASAN and TSAN (Exercise 6) apply only to C and C++ programs.  Performance
+testing (Exercise 5) does not apply either, because BeanCounter has no
+performance problems to find, and neither do Docker containers
+(Exercise 8 Part 2), because BeanCounter is a plain Java project that Maven
+already builds portably.  That leaves the four techniques in the subsections
+below.  Each subsection lists what a complete submission must include.  The
+requirements are there so that each 5% takes a comparable amount of work
+regardless of which technique you choose, so a submission that misses some of
+them will receive partial credit.
 
 ## General Rules
 
@@ -824,7 +859,7 @@ misses some of them will receive partial credit.
 
 ## Requirements Specification and Test Plan (Exercise 1)
 
-Task 7 has you manually test the GUI without a test plan.  For this extra
+Task 8 has you manually test the GUI without a test plan.  For this extra
 credit, you write the specifications and the test plan using Sphinx-Needs,
 just like for CatScale in Exercise 1.  Treat
 [requirements.md](requirements.md) as the notes you jotted down after talking
@@ -852,32 +887,6 @@ to the stakeholders.
 1. The forward and backward traceability matrices on the Traceability page
    must show no orphaned test cases and no uncovered specs for the
    requirements listed in the previous step.
-
-## Code Coverage (Exercise 2)
-
-Your required tests already cover most of the logic and Bean classes, but they
-check only three behaviors of the Text UI.  For this extra credit, you measure
-and improve coverage the way you did for RentACat in Exercise 2.
-
-1. Add the JaCoCo plugin to pom.xml, copying its configuration from
-   Exercise 2's pom.xml, so that "mvn test" generates a report under
-   target/site/jacoco/.
-
-1. Create a new JUnit test class SystemsTest.java under src/test/java/edu/pitt/cs
-   that tests BeanCounterTextUI.main end to end.  Cover every Text UI behavior
-   described in FUN-USAGE, FUN-MACHINE-DEBUG, and the FUN-TEXTUI-*
-   requirements, including each kind of invalid argument, each command, and
-   the debug output.  Document each test with Preconditions, Execution steps,
-   and Postconditions in its Javadoc comment, and assert on the system output,
-   as in Exercise 2.
-
-1. Reach at least 90% instruction coverage for each of LuckyBeanImpl.java,
-   SkilledBeanImpl.java, BeanCounterLogicImpl.java, and BeanCounterTextUI.java.
-
-1. Save screenshots of the JaCoCo report for those four classes under a
-   jacoco_reports/ folder, named luckybeanimpl_jacoco.jpg,
-   skilledbeanimpl_jacoco.jpg, beancounterlogicimpl_jacoco.jpg, and
-   beancountertextui_jacoco.jpg.
 
 ## Behavior-Driven Development (Exercise 3)
 
@@ -948,7 +957,7 @@ for slot counts 1-5 and bean counts 0-3, because the state space explodes
 beyond that.  Real users run machines with dozens of slots and hundreds of
 beans.  For this extra credit, you use QuickCheck, as in Exercise 9, to check
 invariants on randomly generated machines drawn from a much larger range of
-configurations.  
+configurations.
 
 1. Add the junit-quickcheck-core and junit-quickcheck-generators dependencies
    to pom.xml, copying them from Exercise 9's pom.xml.  Create a new test class
@@ -999,6 +1008,10 @@ configurations.
    be switched in one place.  Every property must pass on
    InstanceType.SOLUTION and InstanceType.IMPL, and at least two properties
    must fail on InstanceType.BUGGY.
+
+1. For each property that fails on the buggy implementation, record the
+   shrunk configuration that QuickCheck reports in EXTRA_CREDIT.md, and say
+   whether it falls within JPFJUnitTest's range of slot counts and bean counts.
 
 1. Keep the whole class fast enough to run with every "mvn test": under one
    minute in total.
