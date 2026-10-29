@@ -8,10 +8,10 @@
   * [What to do](#what-to-do)
     + [Task 1: Write Unit Tests for BeanTest to drive Bean development](#task-1-write-unit-tests-for-beantest-to-drive-bean-development)
     + [Task 2: Write Integration and System Tests to drive BeanCounterLogic development](#task-2-write-integration-and-system-tests-to-drive-beancounterlogic-development)
-    + [Task 3: Generate Paths for Different Machine Configurations in JPFJUnitTest.java](#task-3-generate-paths-for-different-machine-configurations-in-jpfjunittestjava)
-    + [Task 4: Write Property-based tests in JPFJUnitTest.java](#task-4-write-property-based-tests-in-jpfjunittestjava)
-    + [Task 5: Add an Extra Property-based Test to JPFJUnitTest.java](#task-5-add-an-extra-property-based-test-to-jpfjunittestjava)
-    + [Task 6: Measure and Improve Code Coverage](#task-6-measure-and-improve-code-coverage)
+    + [Task 3: Measure and Improve Code Coverage](#task-3-measure-and-improve-code-coverage)
+    + [Task 4: Generate Paths for Different Machine Configurations in JPFJUnitTest.java](#task-4-generate-paths-for-different-machine-configurations-in-jpfjunittestjava)
+    + [Task 5: Write Property-based tests in JPFJUnitTest.java](#task-5-write-property-based-tests-in-jpfjunittestjava)
+    + [Task 6: Add an Extra Property-based Test to JPFJUnitTest.java](#task-6-add-an-extra-property-based-test-to-jpfjunittestjava)
     + [Task 7: Linting and Auditing](#task-7-linting-and-auditing)
     + [Task 8: Manual System Testing](#task-8-manual-system-testing)
 - [Submission](#submission)
@@ -318,7 +318,7 @@ easier testing. (**modify**)
 
 * JPFJUnitTest.java - An integration test for the BeanCounterLogicImpl class
   run on top of JPF.  You are asked to exhaustively test different machine
-configurations (see [Task 3](#task-3-generate-paths-for-different-machine-configurations-in-jpfjunittestjava))
+configurations (see [Task 4](#task-4-generate-paths-for-different-machine-configurations-in-jpfjunittestjava))
 and all random outcomes of each machine. (**modify**)
 
 * BeanCounterLogicTest.java - An integration test for the BeanCounterLogicImpl
@@ -378,12 +378,10 @@ coordinates of Beans are translated to physical coordinates.
 * jpf-core/runTest.bat and jpf-core/runTest.sh - Scripts to run JPFJUnitTest on
   top of JPF.  
 
-Take care that you limit your modifications to the files that are marked
-**modify**, as all the other files will be ignored in your submission (the only
-exceptions are the test classes you add in Task 6 and [extra
-credit](#extra-credit) work, which are graded by hand).  Also, take care that
-you do not change the public interfaces of BeanCounterLogic and Bean as
-GradeScope relies on them.
+Take care that you limit your changes to the files that are marked
+**modify**, as changes to any other existing file will be ignored in your
+submission.  Also, take care that you do not change the public interfaces of
+BeanCounterLogic and Bean as GradeScope relies on them.
 
 I expect you to employ test-driven development (TDD) for this project and fully
 embrace it.  I can guarantee you that it will shorten development time.  You
@@ -507,8 +505,50 @@ development of BeanCounterLogicImpl using InstanceType.IMPL instances.  Again,
 please pay close attention to the Javadoc comment on top of BeanCounterLogicImpl
 before starting.
 
-If you want to see the bugs in BeanCounterLogicBuggy for yourself, you can
-run the buggy Text UI and enter the S command:
+### Task 3: Measure and Improve Code Coverage
+
+Code coverage measures how much of your code your tests actually execute.  As
+in Exercise 2, we will use JaCoCo, which is already configured in pom.xml.
+Every "mvn test" generates a coverage report that you can open at:
+
+```
+target/site/jacoco/index.html
+```
+
+If any of your JUnit tests fail, Maven stops before JaCoCo generates the
+report.  To generate it anyway, run:
+
+```
+mvn jacoco:report
+```
+
+Note that JaCoCo only measures the tests that Maven runs, so JPFJUnitTest,
+which you will run on top of JPF starting in Task 4, does not count toward
+coverage.
+
+Once your implementation passes the tests from Tasks 1 and 2, reach at least
+90% instruction coverage for each of LuckyBeanImpl.java, SkilledBeanImpl.java,
+BeanCounterLogicImpl.java, and BeanCounterTextUI.java.  Until you reach it,
+"mvn test" prints a message for each of these classes that is below 90%, but
+the build does not fail, so you can keep running "mvn test" and "mvn site"
+while you work.  Which tests to add is up to you.  Add them to BeanTest.java,
+BeanCounterLogicTest.java, or BeanCounterTextUITest.java, alongside the tests
+you wrote in Tasks 1 and 2.  Like the required tests, every test you add must
+pass on the solution implementation.  Unlike the required tests, the tests you
+add do not need to fail on the buggy implementation: that expectation applies
+only to the test methods that came with the skeleton code.  As with the other
+tests, document each test you add with Preconditions, Execution steps, and
+Postconditions in its Javadoc comment, and assert on its postconditions.
+
+### Task 4: Generate Paths for Different Machine Configurations in JPFJUnitTest.java
+
+By now we are somewhat confident that we have a mostly working application,
+with tests that cover most of the code.  But there still might be bugs lurking
+because we did not test all different combinations of machine configurations
+and also did not test all the random variations that a machine goes through
+even for a single configuration.
+
+To see why this matters, run the buggy Text UI and enter the S command:
 
 ```
 java -cp BeanCounterBuggy.jar edu.pitt.cs.BeanCounterTextUIBuggy 10 400 luck
@@ -546,15 +586,6 @@ unless you know exactly what you are looking for and even then you need a
 certain amount of luck.  Model checking with Java PathFinder (JPF) can find
 bugs like this one, as long as the configurations we check are large enough to
 trigger them.
-
-### Task 3: Generate Paths for Different Machine Configurations in JPFJUnitTest.java
-
-By now we are somewhat confident that we have a mostly working application.
-But as noted earlier with the buggy implementation, there still might be bugs
-lurking because we did not test all different combinations of machine
-configurations and also did not test all the random variations that a machine
-goes through even for a single configuration.  For that we need model checking
-using JPF.
 
 Notice that I have intentionally separated out the logic part of the program
 from the GUI.  This was done to make model checking easier.  Model checking a
@@ -694,7 +725,7 @@ You can see how JPF exhaustively tries out all possible combinations of machine
 configurations.  Since the println was just for demonstration purposes, please
 remove it in your final submission and replace it with the actual test.
 
-### Task 4: Write Property-based tests in JPFJUnitTest.java
+### Task 5: Write Property-based tests in JPFJUnitTest.java
 
 Complete [JPFJUnitTest.java](src/test/java/edu/pitt/cs/JPFJUnitTest.java) by
 replacing the // TODO comments.  Pay close attention to the invariants you are
@@ -718,7 +749,7 @@ solution tests pass and all buggy tests fail with the exception of testReset().
 After you verify your tests, try running them on InstanceType.IMPL to verify
 your own implementation.  Your final submission should use InstanceType.IMPL.
 
-### Task 5: Add an Extra Property-based Test to JPFJUnitTest.java
+### Task 6: Add an Extra Property-based Test to JPFJUnitTest.java
 
 _Add one more test case of your own that helps you verify some invariant
 property_.  Add that test at the very end.  Make sure you test a new invariant
@@ -728,39 +759,6 @@ creative!  Remember, it has to be an invariant.  If you write a test applicable
 to a specific input combination using if statements, it doesn't count.  Make
 sure that the test case is well documented with a Javadoc comment just like
 other methods.
-
-### Task 6: Measure and Improve Code Coverage
-
-Code coverage measures how much of your code your tests actually execute.  As
-in Exercise 2, we will use JaCoCo, which is already configured in pom.xml.
-Every "mvn test" generates a coverage report that you can open at:
-
-```
-target/site/jacoco/index.html
-```
-
-If any of your JUnit tests fail, Maven stops before JaCoCo generates the
-report.  To generate it anyway, run:
-
-```
-mvn jacoco:report
-```
-
-Note that JaCoCo only measures the tests that Maven runs, so JPFJUnitTest,
-which you run on top of JPF, does not count toward coverage.
-
-Reach at least 90% instruction coverage for each of LuckyBeanImpl.java,
-SkilledBeanImpl.java, BeanCounterLogicImpl.java, and BeanCounterTextUI.java.
-Until you reach it, "mvn test" prints a message for each of these classes that
-is below 90%, but the build does not fail, so you can keep running "mvn test"
-and "mvn site" while you work.  Which tests to add is up to you.  Put any tests
-you add in new test classes, not in BeanTest.java, BeanCounterLogicTest.java,
-BeanCounterTextUITest.java, or JPFJUnitTest.java.  The autograder expects every
-test in those four files to fail on the buggy implementation (with the
-exceptions noted in Tasks 1, 2, and 4), which most coverage tests will not.  As
-with the other tests, document each new test with Preconditions, Execution
-steps, and Postconditions in its Javadoc comment, and assert on its
-postconditions.
 
 ### Task 7: Linting and Auditing
 
@@ -792,8 +790,8 @@ it to GradeScope at the **Final Project** link.  Don't forget to add your
 partner, if you have one.  Once you submit, GradeScope will run the autograder
 to grade you and give feedback.  If you get deductions, fix your code based on
 the feedback and resubmit.  Repeat until you don't get deductions.  If you did
-any extra credit, it is graded by hand from the same submission, so there is no
-separate link.
+any extra credit, it is part of the same submission, so there is no separate
+link.
 
 # Resources
 
@@ -844,11 +842,18 @@ them will receive partial credit.
    found nothing.  If EXTRA_CREDIT.md lists more than two techniques, only the
    first two are graded.
 
+1. Create an EXTRA_CREDIT_FILES.txt file at the root of your repository that
+   lists every file you added or changed for the extra credit, one per line,
+   as a path from the root of the repository (for example,
+   src/test/java/edu/pitt/cs/BeanCounterLogicStochasticTest.java).  Include
+   EXTRA_CREDIT.md and any existing files you changed, such as pom.xml.  List
+   each file individually rather than listing a folder, and do not list
+   generated files, such as anything under target/ or docs/_build/.
+
 1. Put extra credit tests in new test classes, not in BeanTest.java,
-   BeanCounterLogicTest.java, BeanCounterTextUITest.java, or JPFJUnitTest.java.
-   The autograder expects every test in those four files to fail on the buggy
-   implementation (with the exceptions noted in Tasks 1, 2, and 4), which most
-   extra credit tests will not.
+   BeanCounterLogicTest.java, BeanCounterTextUITest.java, or JPFJUnitTest.java,
+   so that they are graded as extra credit and not as part of the required
+   tasks.
 
 1. You may modify pom.xml to add the dependencies and plugins you need.  The
    autograder ignores pom.xml, so make sure the required tasks still work with
