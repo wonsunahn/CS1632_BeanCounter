@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 import java.util.Random;
 import javax.swing.JPanel;
@@ -31,7 +33,6 @@ public class MainPanel extends JPanel {
 
 	private boolean isRunning;			// Is the bean counter running now?
 
-	private int barHeight;				// The height reserved for bar graphs in the panel
 	private final Timer animationTimer;
 	private int frameDelay;
 	private int stepDelay;
@@ -80,9 +81,16 @@ public class MainPanel extends JPanel {
 		// Set some display related parameters
 		stepDelay = SLOW_STEP_DELAY;
 		animationStride = SLOW_ANIMATION_STRIDE;
-		// Heuristically maximum height of a bell curve with some headroom
-		barHeight = (int) Math.round(beanCount * 0.27) + 10; 
 		setBackground(Color.WHITE);
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent event) {
+				currentBeanPositions = getBeanPositions();
+				animationStartBeanPositions = null;
+				animationEndBeanPositions = null;
+				repaint();
+			}
+		});
 	}
 
 	static boolean moveAlongLine(Point current, Point start, Point target) {
@@ -121,6 +129,11 @@ public class MainPanel extends JPanel {
 		return position;
 	}
 
+	private int getBarGraphHeight() {
+		int usableHeight = getHeight() - TOP_MARGIN - BOTTOM_MARGIN - BAR_TEXT_HEIGHT;
+		return Math.max(1, usableHeight / 4);
+	}
+
 	/**
 	 * Returns the physical coordinate for logical coordinate p. The logical
 	 * coordinate is the coordinate system used by BeanCounterLogic (see
@@ -135,7 +148,7 @@ public class MainPanel extends JPanel {
 		int initialX = d.width / 2;
 		int initialY = TOP_MARGIN;
 		int pegXSpacing = d.width / slotCount;
-		int pegYSpacing = (d.height - TOP_MARGIN - BOTTOM_MARGIN - barHeight - BAR_TEXT_HEIGHT)
+		int pegYSpacing = (d.height - TOP_MARGIN - BOTTOM_MARGIN - getBarGraphHeight() - BAR_TEXT_HEIGHT)
 				/ Math.max(1, slotCount - 1);
 		int physicalX = initialX - pegXSpacing / 2 * p.y + p.x * pegXSpacing;
 		int physicalY = initialY + p.y * pegYSpacing;
@@ -354,13 +367,24 @@ public class MainPanel extends JPanel {
 	 */
 	public void drawBars(Graphics g) {
 		g.setColor(Color.BLACK);
+		int[] beanCounts = new int[slotCount];
+		int maxBeanCount = 0;
+		for (int i = 0; i < slotCount; i++) {
+			beanCounts[i] = logic.getSlotBeanCount(i);
+			maxBeanCount = Math.max(maxBeanCount, beanCounts[i]);
+		}
+		int maxBarHeight = getBarGraphHeight();
 		for (int i = 0; i < slotCount; i++) {
 			Dimension d = getSize();
 			Point p = logicalToPhysical(new Point(i, slotCount));
 			int barWidth = d.width / (slotCount + 1);
-			int beanCount = logic.getSlotBeanCount(i);
-			g.fillRect(p.x, d.height - BOTTOM_MARGIN - BAR_TEXT_HEIGHT - beanCount, barWidth, beanCount);
-			g.drawString(String.valueOf(i), p.x + barWidth / 2, d.height - BOTTOM_MARGIN);
+			int beanCount = beanCounts[i];
+			int barHeight = beanCount == 0 ? 0
+					: Math.max(1, (int) Math.round((double) beanCount * maxBarHeight / maxBeanCount));
+			g.fillRect(p.x, d.height - BOTTOM_MARGIN - BAR_TEXT_HEIGHT - barHeight, barWidth, barHeight);
+			String label = String.valueOf(i);
+			int labelX = p.x + (barWidth - g.getFontMetrics().stringWidth(label)) / 2;
+			g.drawString(label, labelX, d.height - BOTTOM_MARGIN);
 		}
 	}
 

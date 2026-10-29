@@ -36,9 +36,9 @@ where N is its skill level. For the remaining pegs, it shall fall left.
 
 FUN-MACHINE-AVERAGE - The machine shall maintain an average slot index of all
 beans currently in slots, weighted by the number of beans in each slot. If no
-beans are in slots, the average shall be 0. When displayed, the average shall
-be rounded to the nearest hundredth, with trailing zeros and the decimal point
-omitted when they are not needed.
+beans are in slots, the average shall be 0. When displayed, the average shall be
+rounded to the nearest hundredth, with trailing zeros and any trailing decimal
+point omitted (for example, "2.1" and "1" rather than "2.10" and "1.00").
 
 FUN-MACHINE-LOWER-HALF - On invocation of the "lower half" feature, the feature
 shall affect only beans in slots. It shall keep half of those beans, discarding
@@ -116,8 +116,8 @@ be 8 buttons: "Step", "Slow", "Fast", "Stop", "Lower Half", "Upper Half",
 pool. The display shall update whenever the machine state changes.
 
 FUN-GUI-SLOTS - The bottom slots shall display the number of beans in each slot
-in the form of a bar graph where the height of the bar in pixels shall equal to
-the number of beans.
+in the form of a bar graph where the height of the bar is proportional to the
+number of beans.
 
 FUN-GUI-STEP - When the "Step" button is pressed, the bean counter shall advance
 one step as described in FUN-MACHINE-STEP.
