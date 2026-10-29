@@ -12,9 +12,14 @@ import java.util.Random;
  * 
  * <pre>
  * SKILL_AVERAGE = (double) (SLOT_COUNT-1) * 0.5
- * SKILL_STDEV = (double) Math.sqrt(SLOT_COUNT * 0.5 * (1 - 0.5))
+ * SKILL_STDEV = (double) Math.sqrt((SLOT_COUNT-1) * 0.5 * (1 - 0.5))
  * SKILL_LEVEL = (int) Math.round(rand.nextGaussian() * SKILL_STDEV + SKILL_AVERAGE)
  * </pre>
+ * 
+ * <p>
+ * SLOT_COUNT-1 is the number of rows of pegs, so SKILL_AVERAGE and SKILL_STDEV
+ * are the mean and standard deviation of the slot that a lucky bean lands in.
+ * This makes skilled beans and lucky beans produce nearly the same bell curve.
  * 
  * <p>
  * Make sure you bound SKILL_LEVEL to be between 0 and SLOT_COUNT-1, if the
