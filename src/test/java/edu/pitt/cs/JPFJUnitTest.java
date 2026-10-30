@@ -32,7 +32,7 @@ public class JPFJUnitTest extends TestJPF {
 		int inFlight = 0;
 		for (int yPos = 0; yPos < slotCount; yPos++) {
 			int xPos = logic.getInFlightBeanXPos(yPos);
-			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) {
+			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS && xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) {
 				inFlight++;
 			}
 		}
@@ -70,12 +70,13 @@ public class JPFJUnitTest extends TestJPF {
 		// Create the beans
 		beans = new Bean[beanCount];
 		for (int i = 0; i < beanCount; i++) {
-			beans[i] = Bean.createInstance(InstanceType.IMPL, slotCount, isLuck, new Random(42));
+			beans[i] = Bean.createInstance(InstanceType.IMPL, slotCount, isLuck, new Random(42l));
 		}
 
 		// A failstring useful to pass to assertions to get a more descriptive error.
-		failString = "Failure in (slotCount=" + slotCount + ", beanCount=" + beanCount
-				+ ", isLucky=" + isLuck + "):";
+		failString = new String("Failure in (slotCount=" + slotCount + ", beanCount=" + beanCount
+				+ ", isLucky=" + isLuck + "):");
+		failString.trim();
 	}
 
 	/**

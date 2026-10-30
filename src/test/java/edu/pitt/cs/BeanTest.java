@@ -24,7 +24,7 @@ public class BeanTest {
 	final int slotCount = 10;
 
 	Random rand;
-	Bean[] beans;
+	Bean beans[];
 
 	/**
 	 * Set up the JUnit test fixture.
@@ -32,6 +32,7 @@ public class BeanTest {
 	@Before
 	public void setUp() {
 		beans = new Bean[beanCount];
+		this.rand = rand;
 
 		// TODO: Create a mock Random object and assign to rand
 		

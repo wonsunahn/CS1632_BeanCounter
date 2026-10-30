@@ -20,7 +20,7 @@ import javax.swing.Timer;
  * internal state animations between frames.
  */
 
-public class MainPanel extends JPanel {
+public final class MainPanel extends JPanel {
 
 	private final BeanCounterLogic logic;	// The core logic of the program
 	private final Bean[] beans;				// The beans in the machine

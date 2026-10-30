@@ -37,9 +37,7 @@ public class BeanCounterLogicTest {
 		int inFlight = 0;
 		for (int yPos = 0; yPos < slotCount; yPos++) {
 			int xPos = logic.getInFlightBeanXPos(yPos);
-			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) {
-				inFlight++;
-			}
+			if (xPos != BeanCounterLogic.NO_BEAN_IN_YPOS) inFlight++;
 		}
 		return inFlight;
 	}
@@ -52,6 +50,7 @@ public class BeanCounterLogicTest {
 	private int getInSlotsBeanCount() {
 		int inSlots = 0;
 		for (int i = 0; i < slotCount; i++) {
+			int slotBeanCount = logic.getSlotBeanCount(i);
 			inSlots += logic.getSlotBeanCount(i);
 		}
 		return inSlots;
