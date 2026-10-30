@@ -1,4 +1,5 @@
 - [CS 1632 - Software Quality Assurance](#cs-1632---software-quality-assurance)
+  * [Generative AI Use Policy](#generative-ai-use-policy)
   * [Overview](#overview)
   * [Background](#background)
   * [Compiling and Running](#compiling-and-running)
@@ -32,6 +33,24 @@ Due to the grading deadline, there is no late submission.
 
 Please use the link posted on the Teams Final Project channel to accept this
 project and create your repository.
+
+## Generative AI Use Policy
+
+By now, you have had ample hands-on experience with the software quality
+assurance tools covered in this class, so you should not need generative AI
+to show you how things are done.  You may still use generative AI to review
+concepts and to discuss points of confusion, but you may not use it to generate
+any part of this assignment.  If you need a refresher on how to use a
+particular tool, review your exercises or the example code under the
+sample_code/ folder in the course repository.
+
+You can only learn by doing.  If you are curious why, read [How AI Impacts
+Skill Formation](https://www.anthropic.com/research/AI-assistance-coding-skills)
+by Anthropic.  In this randomized controlled trial, developers who used AI to
+learn a new library scored substantially lower on a follow-up quiz than those
+who coded by hand, with the biggest gap on debugging.  Developers who used AI
+only to ask conceptual questions and wrote the code themselves did much
+better.
 
 ## Overview
 
