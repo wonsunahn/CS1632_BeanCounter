@@ -53,6 +53,7 @@ public class MainPanel extends JPanel {
 	/**
 	 * Constructor - creates the main animation panel for the machine.
 	 * 
+	 * @param type      the implementation of the logic and beans to use
 	 * @param slotCount number of slots in the machine
 	 * @param beanCount number of beans in the machine
 	 * @param isLuck    whether beans progress through pure luck (or skill)
@@ -61,6 +62,15 @@ public class MainPanel extends JPanel {
 		this(type, slotCount, beanCount, isLuck, false);
 	}
 
+	/**
+	 * Constructor - creates the main animation panel for the machine.
+	 * 
+	 * @param type         the implementation of the logic and beans to use
+	 * @param slotCount    number of slots in the machine
+	 * @param beanCount    number of beans in the machine
+	 * @param isLuck       whether beans progress through pure luck (or skill)
+	 * @param debugEnabled whether to print the machine state after each step
+	 */
 	public MainPanel(InstanceType type, int slotCount, int beanCount, boolean isLuck, boolean debugEnabled) {
 		super();
 		this.slotCount = slotCount;
@@ -83,6 +93,12 @@ public class MainPanel extends JPanel {
 		animationStride = SLOW_ANIMATION_STRIDE;
 		setBackground(Color.WHITE);
 		addComponentListener(new ComponentAdapter() {
+			/**
+			 * Recomputes the bean positions when the panel is resized, since the positions
+			 * depend on the size of the panel.
+			 * 
+			 * @param event the resize event
+			 */
 			@Override
 			public void componentResized(ComponentEvent event) {
 				currentBeanPositions = getBeanPositions();
@@ -93,10 +109,29 @@ public class MainPanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Moves a point one pixel along the line from start to target.
+	 * 
+	 * @param current the point to move, which is updated in place
+	 * @param start   the start of the line
+	 * @param target  the end of the line
+	 * @return whether current has reached target
+	 */
 	static boolean moveAlongLine(Point current, Point start, Point target) {
 		return moveAlongLine(current, start, target, 1);
 	}
 
+	/**
+	 * Moves a point along the line from start to target by up to stride pixels,
+	 * measured along the longer axis of the line.
+	 * 
+	 * @param current the point to move, which is updated in place
+	 * @param start   the start of the line
+	 * @param target  the end of the line
+	 * @param stride  the number of pixels to move, which must be positive
+	 * @return whether current has reached target
+	 * @throws IllegalArgumentException if stride is not positive
+	 */
 	static boolean moveAlongLine(Point current, Point start, Point target, int stride) {
 		int deltaX = target.x - start.x;
 		int deltaY = target.y - start.y;
@@ -115,10 +150,25 @@ public class MainPanel extends JPanel {
 		return nextProgress == steps;
 	}
 
+	/**
+	 * Calculates the x-coordinate of the left edge of a bean so that the bean is
+	 * centered over a slot label.
+	 * 
+	 * @param labelX     the x-coordinate of the left edge of the label
+	 * @param labelWidth the width of the label in pixels
+	 * @return the x-coordinate of the left edge of the bean
+	 */
 	static int getBeanXCenteredOnLabel(int labelX, int labelWidth) {
 		return labelX + labelWidth / 2 - BEAN_SIZE / 2;
 	}
 
+	/**
+	 * Calculates the physical position of an in-flight bean in the last row of the
+	 * machine, centered over the label of the slot it is about to fall into.
+	 * 
+	 * @param slotIndex the slot below the bean
+	 * @return the physical position of the bean
+	 */
 	private Point getFinalRowBeanPosition(int slotIndex) {
 		Point position = logicalToPhysical(new Point(slotIndex, slotCount - 1));
 		int barWidth = getWidth() / (slotCount + 1);
@@ -129,6 +179,12 @@ public class MainPanel extends JPanel {
 		return position;
 	}
 
+	/**
+	 * Calculates the maximum height of the bar graph, which is a quarter of the
+	 * usable height of the panel.
+	 * 
+	 * @return the maximum bar height in pixels
+	 */
 	private int getBarGraphHeight() {
 		int usableHeight = getHeight() - TOP_MARGIN - BOTTOM_MARGIN - BAR_TEXT_HEIGHT;
 		return Math.max(1, usableHeight / 4);
@@ -179,6 +235,12 @@ public class MainPanel extends JPanel {
 		return positions;
 	}
 
+	/**
+	 * Makes a deep copy of an array of bean positions.
+	 * 
+	 * @param positions the positions to copy, where null means no bean
+	 * @return a new array with copies of the positions
+	 */
 	private Point[] copyPositions(Point[] positions) {
 		Point[] copies = new Point[positions.length];
 		for (int i = 0; i < positions.length; i++) {
@@ -214,10 +276,20 @@ public class MainPanel extends JPanel {
 		repaint();
 	}
 
+	/**
+	 * Prints the state of the machine to the console, in the same format as the
+	 * Text UI debug output.
+	 */
 	private void printDebugState() {
 		System.out.println(BeanCounterTextUI.renderMachine(logic));
 	}
 
+	/**
+	 * Advances the animation by one frame.  The animation timer calls this method to
+	 * move each in-flight bean toward its position after the current step.  Once
+	 * every bean has arrived, the next step starts if the machine is running
+	 * continuously, and the timer stops otherwise.
+	 */
 	private void advanceAnimation() {
 		if (animationEndBeanPositions == null) {
 			if (isRunning) {
@@ -276,6 +348,13 @@ public class MainPanel extends JPanel {
 		startContinuousRun(FAST_FRAME_DELAY, FAST_STEP_DELAY, FAST_ANIMATION_STRIDE);
 	}
 
+	/**
+	 * Starts running the machine continuously with the given speed settings.
+	 * 
+	 * @param frameDelay        the delay between animation frames in milliseconds
+	 * @param delayBetweenSteps the delay between steps in milliseconds
+	 * @param animationStride   the number of pixels a bean moves per frame
+	 */
 	private void startContinuousRun(int frameDelay, int delayBetweenSteps, int animationStride) {
 		isRunning = true;
 		this.frameDelay = frameDelay;
@@ -287,6 +366,10 @@ public class MainPanel extends JPanel {
 		runOneStep();
 	}
 
+	/**
+	 * Stops a continuous run after the step that is currently being animated
+	 * finishes.
+	 */
 	public void stop() {
 		isRunning = false;
 		if (animationEndBeanPositions == null) {
@@ -294,11 +377,19 @@ public class MainPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Removes the upper half of the beans in the slots, keeping the lower half, and
+	 * redraws the panel.
+	 */
 	public void lowerHalf() {
 		logic.lowerHalf();
 		repaint();
 	}
 
+	/**
+	 * Removes the lower half of the beans in the slots, keeping the upper half, and
+	 * redraws the panel.
+	 */
 	public void upperHalf() {
 		logic.upperHalf();
 		repaint();
@@ -403,6 +494,11 @@ public class MainPanel extends JPanel {
 		g.drawString(remaining, d.width - 200, TOP_MARGIN + 30);
 	}
 
+	/**
+	 * Paints the pegs, the in-flight beans, the slot bars, and the statistics.
+	 * 
+	 * @param g the graphics object
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
